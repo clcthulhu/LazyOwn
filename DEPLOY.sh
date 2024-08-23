@@ -58,7 +58,7 @@ python3 readmeneitor.py utils.py
 
 
 # Función para actualizar una sección específica
-update_section() {
+update_section_md() {
     local start_comment="$1"
     local end_comment="$2"
     local content_file="$3"
@@ -70,9 +70,9 @@ update_section() {
 }
 
 # Actualizar cada sección
-update_section "<!-- START UTILS -->" "<!-- END UTILS -->" "$UTILS_FILE"
-update_section "<!-- START COMMANDS -->" "<!-- END COMMANDS -->" "$COMMANDS_FILE"
-update_section "<!-- START CHANGELOG -->" "<!-- END CHANGELOG -->" "$CHANGELOG_FILE"
+update_section_md "<!-- START UTILS -->" "<!-- END UTILS -->" "$UTILS_FILE"
+update_section_md "<!-- START COMMANDS -->" "<!-- END COMMANDS -->" "$COMMANDS_FILE"
+update_section_md "<!-- START CHANGELOG -->" "<!-- END CHANGELOG -->" "$CHANGELOG_FILE"
 
 echo "[*] El archivo $README_FILE ha sido actualizado con el contenido de UTILS.md, COMMANDS.md, y CHANGELOG.md."
 
@@ -86,13 +86,13 @@ mv README.html docs/README.html
 # el html generado es horrible si... es horrible, pero es automatizado... TODO mejorar el html horrible 
 # Definir los archivos HTML
 INDEX_FILE="docs/index.html"
-README_FILE="docs/README.html"
+README_FILE_HTML="docs/README.html"
 
 # Crear una copia de seguridad del archivo index.html
 cp "$INDEX_FILE" "$INDEX_FILE.bak"
 
 # Función para actualizar una sección específica
-update_section() {
+update_section_html() {
     local start_comment="$1"
     local end_comment="$2"
     local content_file="$3"
@@ -104,7 +104,7 @@ update_section() {
 }
 
 # Actualizar cada sección
-update_section "<!-- START README -->" "<!-- END README -->" "$README_FILE"
+update_section_html "<!-- START README -->" "<!-- END README -->" "$README_FILE_HTML"
 
 echo "[*] El archivo $INDEX_FILE ha sido actualizado con el contenido de README.html"
 
@@ -165,7 +165,29 @@ esac
 echo "{\"version\": \"$NEW_VERSION\"}" > version.json
 git -C . add version.json
 
-LISTFILES=$(git diff --name-only $START_COMMIT $END_COMMIT | sed 's/^/- /')
+#LISTFILES=" Modified file(s): $(git diff --name-only $START_COMMIT $END_COMMIT | sed 's/^/- /')"
+# Capturar archivos modificados
+MODIFIED_FILES=$(git diff --name-only $START_COMMIT $END_COMMIT | sed 's/^/- /')
+# Capturar archivos eliminados
+DELETED_FILES=$(git diff --name-only --diff-filter=D $START_COMMIT $END_COMMIT | sed 's/^/- /')
+# Capturar archivos creados
+CREATED_FILES=$(git diff --name-only --diff-filter=A $START_COMMIT $END_COMMIT | sed 's/^/- /')
+
+# Crear LISTFILES incluyendo solo las secciones no vacías
+LISTFILES=""
+if [ -n "$MODIFIED_FILES" ]; then
+    LISTFILES+="Modified file(s):\n$MODIFIED_FILES\n"
+fi
+if [ -n "$DELETED_FILES" ]; then
+    LISTFILES+="Deleted file(s):\n$DELETED_FILES\n"
+fi
+if [ -n "$CREATED_FILES" ]; then
+    LISTFILES+="Created file(s):\n$CREATED_FILES\n"
+fi
+
+# Usar LISTFILES en tu mensaje de commit
+echo -e "$LISTFILES"
+
 # Formatear el mensaje del commit
 COMMIT_MESSAGE="${TYPE}(${TYPEDESC}): ${SUBJECT} \n\n Version: ${NEW_VERSION} \n\n ${BODY} \n\n ${LISTFILES} ${FOOTER} \n\n Fecha: $(git log -1 --format=%ad) \n\n Hora: $(git log -1 --format=%at)"
 
@@ -288,3 +310,4 @@ git -C . tag -s $NEW_VERSION -m "Version $NEW_VERSION"
 git -C . push --follow-tags
 
 echo "[*] Cambios enviados al repositorio remoto con la nueva versión $NEW_VERSION."
+# TODO: DELETE ALL SPAGETTI CODE

@@ -2,6 +2,69 @@
 # Changelog
 
 
+### Nuevas características
+
+### Otros
+
+  *   * feat(malware new): blazor malware \n\n Version: release/0.1.20 \n\n create blazormalware.sh \n\n Modified file(s):\n- DEPLOY.sh - README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - sessions/download_resources.sh\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Tue Aug 20 03:17:47 2024 -0400 \n\n Hora: 1724138267
+
+
+### Refactorización
+
+### Otros
+
+  *   * refactor(refactor): se agrega la libreria colors en modules para usar colorines en los modulos \n\n Version: release/0.1.19 \n\n se agrega un script que hace seo a rhost, ademas de un poco de scraping para darnos datos sobre el host \n\n  Modified file(s): - COMMANDS.md - DEPLOY.sh - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - modules/lazyproxy.py\n  Deleted file(s): \n  Created file(s):  \n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Tue Aug 20 02:20:17 2024 -0400 \n\n Hora: 1724134817
+
+
+### Otros
+
+### Otros
+
+  *   * feature(feat): dos comandos nuevos, skipfish y createdll, nuevo shellcode \n\n Version: release/0.1.19 \n\n nuevos recursos \n\n  Modified file(s): - .gitignore - COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - payload.json  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Mon Aug 19 02:20:52 2024 -0400 \n\n Hora: 1724048452
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(feat): create new command shellcode, run lazymsfvenom modified to create shellcode.sh \n\n Version: release/0.1.18 \n\n modify find command to add the one linner to more pleassure \n\n  Modified file(s): - COMMANDS.md - DEPLOY.sh - README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - utils.py  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Mon Aug 19 00:35:53 2024 -0400 \n\n Hora: 1724042153
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(new feat): new funcionality in proxy command, hexdump on screen, capacity to edit responces from client and server :) mitm ? xD now only prints the thata before sent \n\n Version: release/0.1.17 \n\n and alien gray at the banner :P \n\n - README.md - docs/README.html - docs/index.html - docs/index.html.bak - modules/lazyproxy.py  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Aug 18 21:12:26 2024 -0400 \n\n Hora: 1724029946
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(feat): new prompt \n\n Version: release/0.1.16 \n\n now show the url of the target \n\n - README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Aug 18 18:46:18 2024 -0400 \n\n Hora: 1724021178
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(feat): new command set_proxychains \n\n Version: release/0.1.15 \n\n documented at COMMANDS.md more info use help set_proxychains \n\n - COMMANDS.md - README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Aug 18 16:41:31 2024 -0400 \n\n Hora: 1724013691
+
+
+### Correcciones
+
+### Otros
+
+  *   * fix(bug fixing): bug fixing in vars of DEPLOY.sh \n\n Version: release/0.1.14 \n\n was created readme_file_html to avoid the bug \n\n - DEPLOY.sh - README.md - docs/README.html - docs/index.html - docs/index.html.bak  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Aug 18 16:37:23 2024 -0400 \n\n Hora: 1724013443
+
+
+### Otros
+
+### Otros
+
+  *   * feature(new payload in msfvenom android): new options in msf rev android \n\n Version: release/0.1.13 \n\n bug fixing in DEPLOY.sh duplicated function \n\n - DEPLOY.sh - README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sat Aug 17 06:44:52 2024 -0400 \n\n Hora: 1723891492
+
+
 ### Documentación
 
 ### Otros

@@ -5399,6 +5399,105 @@ Example:
     do_lazyscript('example_script.ls')
     This would execute all commands listed in 'lazyscripts/example_script.ls'.
 
+## set_proxychains
+Relanza la aplicación actual utilizando `proxychains` para enrutar el tráfico
+a través de los proxies configurados.
+
+Este comando reinicia la aplicación desde el principio utilizando un script
+bash externo llamado `run`, que se encarga de configurar el entorno 
+(como activar un entorno virtual) y luego ejecutar la aplicación Python. 
+El comando `proxychains` se utiliza para asegurar que cualquier comando 
+ejecutado dentro de la aplicación, como `nmap`, sea encaminado a través 
+de los proxies especificados en la configuración de `proxychains`.
+
+Pasos realizados por esta función:
+1. Obtiene la ruta al script `run`.
+2. Relanza el script `run` bajo `proxychains` utilizando `subprocess.run`.
+3. Sale de la instancia actual de la aplicación para evitar duplicación.
+
+Args:
+    line (str): No se utiliza en este comando, pero se incluye como parte 
+                de la interfaz estándar de `cmd`.
+
+## shellcode
+Generates a Python one-liner to execute shellcode from a given URL.
+
+This function:
+1. Retrieves the local host (lhost) from the parameters.
+2. Checks if the local host is valid.
+3. Verifies the existence of the `shellcode.bin` file in the expected directory.
+4. Constructs a Python one-liner command that:
+    - Fetches the shellcode from the specified URL.
+    - Decodes the base64-encoded shellcode.
+    - Creates a buffer in memory for the shellcode.
+    - Casts the buffer to a function pointer.
+    - Executes the shellcode.
+5. Copies the generated command to the clipboard for easy execution.
+
+## skipfish
+This function executes the web security scanning tool Skipfish 
+using the provided configuration and parameters. It allows 
+scanning a specified target (rhost) and saves the results 
+in a designated output directory.
+
+Parameters:
+- self: Refers to the instance of the class in which this function is defined.
+- line: A string that may contain additional options to modify the scanning behavior.
+
+Function Flow:
+1. Default values are set for the target IP (rhost), port (port), and output directory (outputdir).
+2. The validity of the target (rhost) is checked using the `check_rhost` function.
+3. If no argument is provided in `line`, a `skipfish` command is constructed using the default values.
+4. If `line` starts with 'url', the URL configured in `self.params['url']` is retrieved and used to construct the `skipfish` command.
+5. If the URL is not configured and an attempt is made to use the 'url' option, an error message is printed, and the function exits.
+6. The constructed `skipfish` command is displayed on the console and executed using `os.system`.
+
+Note:
+- The function assumes that the `skipfish` tool is installed on the system.
+- The output of the scan is saved in the directory `sessions/{rhost}/skipfish/`.
+- The wordlist used by Skipfish is specified in `wordlist`.
+
+## createdll
+Create a Windows DLL file using MinGW-w64.
+
+This function prompts the user to select between creating a 32-bit 
+or 64-bit DLL. It checks if MinGW-w64 is installed, and if not, 
+it installs it. The user must provide a filename for the DLL, 
+which will be created from the `sessions/rev.c` source file. 
+The function constructs the appropriate command to compile 
+the DLL based on the user's choice and executes it. 
+It also opens the `rev.c` file in a text editor for any modifications 
+before compilation.
+
+Parameters:
+- line (str): The name of the DLL file to be created. 
+            Must be provided by the user.
+
+Usage:
+- Choose "1" for 32-bit or "2" for 64-bit compilation.
+- Ensure that shellcode is created beforehand using 
+the `lazymsfvenom` or `venom` options 13 or 14 
+to replace in `sessions/rev.c`.
+
+## seo
+Performs a web seo fingerprinting scan using `lazyseo.py`.
+
+1. Executes the `lazyseo.py` command to identify h1,h2,links,etc used by the target web application.
+
+:param line: This parameter is not used in the current implementation but could be used to pass additional options or arguments if needed.
+:param rhost: The target web host to be scanned, specified in the `params` dictionary.
+
+:returns: None
+
+Manual execution:
+To manually perform web seo fingerprinting, use the following command:
+    lazyseo.py <target_host>
+
+Replace `<target_host>` with the URL or IP address of the web application you want to scan.
+
+For example:
+    lazyseo.py example.com
+
 ## double_base64_encode
 Perform double Base64 encoding on the given command.
 
@@ -5458,6 +5557,69 @@ Raises:
 <!-- START CHANGELOG -->
 
 # Changelog
+
+
+### Refactorización
+
+### Otros
+
+  *   * refactor(refactor): se agrega la libreria colors en modules para usar colorines en los modulos \n\n Version: release/0.1.19 \n\n se agrega un script que hace seo a rhost, ademas de un poco de scraping para darnos datos sobre el host \n\n  Modified file(s): - COMMANDS.md - DEPLOY.sh - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - modules/lazyproxy.py\n  Deleted file(s): \n  Created file(s):  \n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Tue Aug 20 02:20:17 2024 -0400 \n\n Hora: 1724134817
+
+
+### Otros
+
+### Otros
+
+  *   * feature(feat): dos comandos nuevos, skipfish y createdll, nuevo shellcode \n\n Version: release/0.1.19 \n\n nuevos recursos \n\n  Modified file(s): - .gitignore - COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - payload.json  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Mon Aug 19 02:20:52 2024 -0400 \n\n Hora: 1724048452
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(feat): create new command shellcode, run lazymsfvenom modified to create shellcode.sh \n\n Version: release/0.1.18 \n\n modify find command to add the one linner to more pleassure \n\n  Modified file(s): - COMMANDS.md - DEPLOY.sh - README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - utils.py  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Mon Aug 19 00:35:53 2024 -0400 \n\n Hora: 1724042153
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(new feat): new funcionality in proxy command, hexdump on screen, capacity to edit responces from client and server :) mitm ? xD now only prints the thata before sent \n\n Version: release/0.1.17 \n\n and alien gray at the banner :P \n\n - README.md - docs/README.html - docs/index.html - docs/index.html.bak - modules/lazyproxy.py  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Aug 18 21:12:26 2024 -0400 \n\n Hora: 1724029946
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(feat): new prompt \n\n Version: release/0.1.16 \n\n now show the url of the target \n\n - README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Aug 18 18:46:18 2024 -0400 \n\n Hora: 1724021178
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(feat): new command set_proxychains \n\n Version: release/0.1.15 \n\n documented at COMMANDS.md more info use help set_proxychains \n\n - COMMANDS.md - README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Aug 18 16:41:31 2024 -0400 \n\n Hora: 1724013691
+
+
+### Correcciones
+
+### Otros
+
+  *   * fix(bug fixing): bug fixing in vars of DEPLOY.sh \n\n Version: release/0.1.14 \n\n was created readme_file_html to avoid the bug \n\n - DEPLOY.sh - README.md - docs/README.html - docs/index.html - docs/index.html.bak  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Aug 18 16:37:23 2024 -0400 \n\n Hora: 1724013443
+
+
+### Otros
+
+### Otros
+
+  *   * feature(new payload in msfvenom android): new options in msf rev android \n\n Version: release/0.1.13 \n\n bug fixing in DEPLOY.sh duplicated function \n\n - DEPLOY.sh - README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sat Aug 17 06:44:52 2024 -0400 \n\n Hora: 1723891492
+
+
+### Documentación
+
+### Otros
+
+  *   * docs(documented): agradecimientos \n\n Version: release/0.1.12 \n\n a ✌ el creador de sicat \n\n - README.md - docs/README.html - docs/index.html - docs/index.html.bak  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sat Aug 17 06:39:12 2024 -0400 \n\n Hora: 1723891152
 
 
 ### Nuevas características
