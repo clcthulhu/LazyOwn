@@ -30,6 +30,12 @@ download() {
         "wget https://github.com/prodigiousMind/revshell/archive/refs/heads/main.zip"
         "wget https://raw.githubusercontent.com/ly4k/PwnKit/main/PwnKit"
         "wget https://github.com/icsharpcode/AvaloniaILSpy/releases/download/v7.2-rc/Linux.x64.Release.zip"
+        "wget https://github.com/RedSiege/WMImplant/raw/master/WMImplant.ps1"
+        "wget https://github.com/BishopFox/sliver/releases/download/v1.5.42/sliver-client_linux"
+        "wget https://github.com/BishopFox/sliver/releases/download/v1.5.42/sliver-client_windows.exe"
+        "wget https://github.com/BishopFox/sliver/releases/download/v1.5.42/sliver-client_macos"
+        "wget https://github.com/nicocha30/ligolo-ng/releases/download/v0.7.2-alpha/ligolo-ng_proxy_0.7.2-alpha_linux_amd64.tar.gz"
+        "wget https://github.com/nicocha30/ligolo-ng/releases/download/v0.7.2-alpha/ligolo-ng_agent_0.7.2-alpha_windows_amd64.zip"
     )
 
     # Imprime los últimos argumentos de cada comando

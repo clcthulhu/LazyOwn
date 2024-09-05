@@ -19,41 +19,34 @@ Descripción: Este archivo contiene la definición de la lógica de todas las fu
 import re
 import os
 import sys
-import subprocess
-import shlex
-import signal
+import ssl
 import json
 import time
+import glob
+import shlex
+import signal
 import base64
 import string
-import glob
+import ctypes
+import socket
+import struct
+import binascii
 import readline
 import requests
-import ctypes
+import tempfile
+import threading
+import subprocess
 import urllib.request
-from urllib.parse import quote, unquote
+from libnmap.parser import NmapParser
+from libnmap.process import NmapProcess
+from urllib.parse import quote, unquote, urlparse
 from modules.lazyencoder_decoder import encode, decode
 
-# Cargar la versión desde el archivo version.json
-def load_version():
-    try:
-        with open('version.json', 'r') as f:
-            data = json.load(f)
-            return data.get('version', 'release/v0.0.14')
-    except FileNotFoundError:
-        return 'release/v0.0.14'
-
-# Establecer la versión del proyecto
-version = load_version()
-
-# Definimos algunos códigos de escape ANSI para colores
 RESET = "\033[0m"
 BOLD = "\033[1m"
 UNDERLINE = "\033[4m"
 INVERT = "\033[7m"
 BLINK = "\033[5m"
-
-# Colores de texto
 BLACK = "\033[30m"
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -62,8 +55,6 @@ BLUE = "\033[34m"
 MAGENTA = "\033[35m"
 CYAN = "\033[36m"
 WHITE = "\033[37m"
-
-# Colores de fondo
 BG_BLACK = "\033[40m"
 BG_RED = "\033[41m"
 BG_GREEN = "\033[42m"
@@ -72,12 +63,10 @@ BG_BLUE = "\033[44m"
 BG_MAGENTA = "\033[45m"
 BG_CYAN = "\033[46m"
 BG_WHITE = "\033[47m"
-# Variables de control
 NOBANNER = False
 COMMAND = None
 RUN_AS_ROOT = False
-
-
+os.environ['OPENSSL_CONF'] = '/usr/lib/ssl/openssl.cnf'
 BANNER = f"""{GREEN}{BG_BLACK}
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⡤⠴⠶⠖⠒⠛⠛⠀⠀⠀⠒⠒⢰⠖⢠⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣭⠷⠞⠉⠫⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠀⠈⠉⠒⠲⠤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -122,6 +111,103 @@ BANNER = f"""{GREEN}{BG_BLACK}
  ░ ░     ░░   ░   ░   ▒   ░      ░      ░     ░   ░  ░ ░ ░ ▒    ░░   ░ ░ ░░ ░ 
           ░           ░  ░       ░      ░  ░    ░        ░ ░     ░     ░  ░   
     [⚠] Starting 👽 LazyOwn Framew0rk ☠ [;,;] """
+
+def parse_ip_mac(input_string):
+    """
+    Extracts IP and MAC addresses from a formatted input string using a regular expression.
+
+    The input string is expected to be in the format: 'IP: (192.168.1.222) MAC: ec:c3:02:b0:4c:96'.
+    The function uses a regular expression to match and extract the IP address and MAC address from the input.
+
+    Args:
+        input_string (str): The formatted string containing the IP and MAC addresses.
+
+    Returns:
+        tuple: A tuple containing the extracted IP address and MAC address. If the format is incorrect, returns (None, None).
+    """
+    match = re.match(r"IP:\s*\(([\d.]+)\)\s*MAC:\s*([\da-f:]+)", input_string.strip())
+    if match:
+        target_ip, target_mac = match.groups()
+        return target_ip, target_mac
+    else:
+        print_error("Error: Input must be in the format 'IP: (192.168.1.222) MAC: ec:c3:02:b0:4c:96'.")
+        return None, None
+
+def create_arp_packet(src_mac, src_ip, dst_ip, dst_mac):
+    """
+    Constructs an ARP packet with the given source and destination IP and MAC addresses.
+
+    The function creates both Ethernet and ARP headers, combining them into a complete ARP packet.
+
+    Args:
+        src_mac (str): Source MAC address in the format 'xx:xx:xx:xx:xx:xx'.
+        src_ip (str): Source IP address in dotted decimal format (e.g., '192.168.1.1').
+        dst_ip (str): Destination IP address in dotted decimal format (e.g., '192.168.1.2').
+        dst_mac (str): Destination MAC address in the format 'xx:xx:xx:xx:xx:xx'.
+
+    Returns:
+        bytes: The constructed ARP packet containing the Ethernet and ARP headers.
+    """
+    eth_header = struct.pack(
+        '!6s6sH',
+        binascii.unhexlify(dst_mac.replace(':', '')),
+        binascii.unhexlify(src_mac.replace(':', '')),
+        0x0806
+    )
+
+    arp_header = struct.pack(
+        '!HHBBH6s4s6s4s',
+        0x0001,
+        0x0800,
+        6,      
+        4,      
+        0x0002, 
+        binascii.unhexlify(src_mac.replace(':', '')),
+        socket.inet_aton(src_ip),
+        binascii.unhexlify(dst_mac.replace(':', '')),
+        socket.inet_aton(dst_ip) 
+    )
+
+    return eth_header + arp_header
+
+def send_packet(packet, iface):
+    """
+    Sends a raw ARP packet over the specified network interface.
+
+    The function creates a raw socket, binds it to the specified network interface, and sends the given packet.
+
+    Args:
+        packet (bytes): The ARP packet to be sent.
+        iface (str): The name of the network interface to use for sending the packet (e.g., 'eth0').
+
+    Raises:
+        OSError: If an error occurs while creating the socket or sending the packet.
+    """
+    with socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.htons(0x0806)) as sock:
+        sock.bind((iface, 0))
+        sock.send(packet)
+
+def load_version():
+    """
+    Load the version number from the 'version.json' file.
+
+    This function attempts to open the 'version.json' file and load its contents. 
+    If the file is found, it retrieves the version number from the JSON data. 
+    If the version key does not exist, it returns a default version 'release/v0.0.14'. 
+    If the file is not found, it also returns the default version.
+
+    Returns:
+    - str: The version number from the file or the default version if the file is not found or the version key is missing.
+    """    
+    try:
+        with open('version.json', 'r') as f:
+            data = json.load(f)
+            return data.get('version', 'release/v0.0.14')
+    except FileNotFoundError:
+        return 'release/v0.0.14'
+
+version = load_version()
+
 def print_error(error):
     """
     Prints an error message to the console.
@@ -186,7 +272,7 @@ def signal_handler(sig, frame):
 
     global should_exit
     print_warn(
-        f"{RED}{YELLOW} para salir usar el comando{GREEN} exit, q or qa ...{RESET}"
+        f"{RED}{YELLOW} To exit, use the command{GREEN} exit, q, or qa ...{RESET}"
     )
     should_exit = True
     readline.set_history_length(0)
@@ -647,6 +733,22 @@ def salida_strace(filename):
 
     
 def exploitalert(content):
+    """
+    Process and display results from ExploitAlert.
+
+    This function checks if the provided content contains any results. 
+    If results are present, it prints the title and link for each exploit found, 
+    and appends the results to a predata list. If no results are found, 
+    it prints an error message.
+
+    Parameters:
+    - content (list): A list of dictionaries containing exploit information.
+
+    Returns:
+    None
+    Thanks to Sicat 🐈
+    An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
+    """    
     try:
         if len(content) != 0:
             
@@ -674,6 +776,22 @@ def exploitalert(content):
     return
 
 def packetstormsecurity(content):
+    """
+    Process and display results from PacketStorm Security.
+
+    This function extracts exploit data from the provided content using regex. 
+    If any results are found, it prints the title and link for each exploit, 
+    and appends the results to a predata list. If no results are found, 
+    it prints an error message.
+
+    Parameters:
+    - content (str): The HTML content from PacketStorm Security.
+
+    Returns:
+    None
+    Thanks to Sicat 🐈
+    An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
+    """    
     try:
         reg = re.findall('<dt><a class="ico text-plain" href="(.*?)" title="(.*?)">(.*?)</a></dt>', content)
         if len(reg) != 0:
@@ -700,6 +818,22 @@ def packetstormsecurity(content):
     return
 
 def nvddb(content):
+    """
+    Process and display results from the National Vulnerability Database.
+
+    This function checks if there are any vulnerabilities in the provided content. 
+    If vulnerabilities are present, it prints the ID, description, and link 
+    for each CVE found, and appends the results to a predata list. 
+    If no results are found, it prints an error message.
+
+    Parameters:
+    - content (dict): A dictionary containing vulnerability data.
+
+    Returns:
+    None
+    Thanks to Sicat 🐈
+    An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
+    """
     try:
         if len(content['vulnerabilities']) != 0:
             print_msg(f"{GREEN}|-----------------------------------------------")
@@ -727,6 +861,22 @@ def nvddb(content):
     return
 
 def find_ss(keyword = ""):
+    """
+    Find CVEs in the National Vulnerability Database based on a keyword.
+
+    This function takes a keyword, formats it for the API request, 
+    and sends a GET request to the NVD API. If the request is successful, 
+    it returns the JSON response containing CVE data; otherwise, 
+    it returns False.
+
+    Parameters:
+    - keyword (str): The keyword to search for in CVEs.
+
+    Returns:
+    - dict or bool: The JSON response containing CVE data or False on failure.
+    Thanks to Sicat 🐈
+    An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
+    """    
     keyword = f"{keyword}"
     keyword = keyword.replace(" ", "%20")
     resp = requests.get(f"https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch={keyword}")
@@ -736,6 +886,22 @@ def find_ss(keyword = ""):
         return False
 
 def find_ea(keyword=""):
+    """
+    Find exploits in ExploitAlert based on a keyword.
+
+    This function takes a keyword, formats it for the API request, 
+    and sends a GET request to the ExploitAlert API. If the request is successful, 
+    it returns the JSON response containing exploit data; otherwise, 
+    it returns False.
+
+    Parameters:
+    - keyword (str): The keyword to search for exploits.
+
+    Returns:
+    - dict or bool: The JSON response containing exploit data or False on failure.
+    Thanks to Sicat 🐈
+    An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
+    """    
     keyword = f"{keyword}"
     try:
         resp = requests.get(f"https://www.exploitalert.com/api/search-exploit?name={keyword}")
@@ -747,12 +913,182 @@ def find_ea(keyword=""):
         return False
 
 def find_ps(keyword=""):
+    """
+    Find exploits in PacketStorm Security based on a keyword.
+
+    This function takes a keyword, formats it for the search request, 
+    and sends a GET request to the PacketStorm Security website. 
+    If the request is successful, it returns the HTML response; otherwise, 
+    it returns False.
+
+    Parameters:
+    - keyword (str): The keyword to search for exploits.
+
+    Returns:
+    - str or bool: The HTML response containing exploit data or False on failure.
+    Thanks to Sicat 🐈
+    An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
+    """    
     keyword = f"{keyword}"
     resp = requests.get(f"https://packetstormsecurity.com/search/?q={keyword}")
     if resp.status_code == 200:
         return resp.text
     else:
         return False
+
+def xor_encrypt_decrypt(data, key):
+    """
+    Encrypts or decrypts data using XOR encryption with the provided key.
+
+    Parameters:
+    data (bytes or bytearray): The input data to be encrypted or decrypted.
+    key (str): The encryption key as a string.
+
+    Returns:
+    bytearray: The result of the XOR operation, which can be either the encrypted or decrypted data.
+
+    Example:
+    encrypted_data = xor_encrypt_decrypt(b"Hello, World!", "key")
+    decrypted_data = xor_encrypt_decrypt(encrypted_data, "key")
+    print(decrypted_data.decode("utf-8"))  # Outputs: Hello, World!
+
+    Additional Notes:
+    - XOR encryption is symmetric, meaning that the same function is used for both encryption and decryption.
+    - The key is repeated cyclically to match the length of the data if necessary.
+    - This method is commonly used for simple encryption tasks, but it is not secure for protecting sensitive information.
+    """
+    key_bytes = bytes(key, "utf-8")
+    key_length = len(key_bytes)
+    return bytearray([data[i] ^ key_bytes[i % key_length] for i in range(len(data))])
+
+def run(command):
+    """
+    Executes a shell command using the subprocess module, capturing its output.
+
+    Parameters:
+    command (str): The command to execute.
+
+    Returns:
+    str: The output of the command if successful, or an error message if an exception occurs.
+
+    Exceptions:
+    - FileNotFoundError: Raised if the command is not found.
+    - subprocess.CalledProcessError: Raised if the command exits with a non-zero status.
+    - subprocess.TimeoutExpired: Raised if the command times out.
+    - Exception: Catches any other unexpected exceptions.
+
+    Example:
+    output = run("ls -la")
+    print(output)
+
+    Additional Notes:
+    The function attempts to execute the provided command, capturing its output.
+    It also handles common exceptions that may occur during command execution.
+    """
+    try:
+        print_msg(f"Attempting to execute: {command}")
+        result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
+        print_msg(result)
+        return result.stdout.strip()
+    except FileNotFoundError as fnf_error:
+        print_error(f"Command not found: {command}")
+        return str(fnf_error)
+    except subprocess.CalledProcessError as cpe_error:
+        print_error(f"Command failed with exit code {cpe_error.returncode}: {command}")
+        return str(cpe_error)
+    except subprocess.TimeoutExpired as te_error:
+        print_error(f"Command timed out: {command}")
+        return str(te_error)
+    except Exception as e:
+        print_error(f"An unexpected error occurred: {str(e)}")
+        return str(e)
+
+def is_exist(file):
+    """Check if a file exists.
+
+    This function checks whether a given file exists on the filesystem. If the file 
+    does not exist, it prints an error message and returns False. Otherwise, it returns True.
+
+    Arguments:
+    file (str): The path to the file that needs to be checked.
+
+    Returns:
+    bool: Returns True if the file exists, False otherwise.
+
+    Example:
+    >>> is_exist('/path/to/file.txt')
+    True
+    >>> is_exist('/non/existent/file.txt')
+    False
+
+    Notes:
+    This function uses os.path.isfile to determine the existence of the file. 
+    Ensure that the provided path is correct and accessible.
+    """
+
+    if not os.path.isfile(file):
+        print_error(f"Fatal error: {file} is missing")
+        return False
+    return True
+
+def get_domain(url):
+    """
+    Extracts the domain from a given URL.
+
+    Parameters:
+    url (str): The full URL from which to extract the domain.
+
+    Returns:
+    str: The extracted domain from the URL, or None if it cannot be extracted.
+    """
+    pattern = r'^(?:https?://)?(?:www\.)?([^/]+)'
+    match = re.search(pattern, url)
+    if match:
+        return match.group(1)
+    return None
+
+def generate_certificates():
+    """
+    Generates a certificate authority (CA), client certificate, and client key.
+    
+    Returns:
+        str: Paths to the generated CA certificate, client certificate, and client key.
+    """
+    # Create a temporary directory for the certificates
+    with tempfile.TemporaryDirectory() as temp_dir:
+        ca_cert_path = os.path.join(temp_dir, "ca_cert.pem")
+        client_cert_path = os.path.join(temp_dir, "client_cert.pem")
+        client_key_path = os.path.join(temp_dir, "client_key.pem")
+
+        # Generate the CA certificate
+        print_msg("Generating CA certificate...")
+        subprocess.run([
+            "sudo", "openssl", "req", "-x509", "-new", "-nodes", "-keyout", "ca_key.pem",
+            "-out", ca_cert_path, "-days", "365", "-subj", "/CN=SliverCA"
+        ], check=True)
+
+        # Generate the client key
+        print_msg("Generating client key...")
+        subprocess.run([
+            "sudo", "openssl", "genrsa", "-out", client_key_path, "2048"
+        ], check=True)
+
+        # Generate the client certificate signing request (CSR)
+        print_msg("Generating client CSR...")
+        subprocess.run([
+            "sudo", "openssl", "req", "-new", "-key", client_key_path, "-out", "client_csr.pem",
+            "-subj", "/CN=SliverClient"
+        ], check=True)
+
+        # Sign the client CSR with the CA key to create the client certificate
+        print_msg("Generating client certificate...")
+        subprocess.run([
+            "sudo", "openssl", "x509", "-req", "-in", "client_csr.pem", "-CA", ca_cert_path,
+            "-CAkey", "ca_key.pem", "-CAcreateserial", "-out", client_cert_path,
+            "-days", "365"
+        ], check=True)
+
+        return ca_cert_path, client_cert_path, client_key_path
 
 
 signal.signal(signal.SIGINT, signal_handler)
@@ -764,11 +1100,12 @@ for arg in arguments:
         print(f"    {RED}[;,;]{GREEN} LazyOwn {CYAN}{version}{RESET}")
         print(f"    {GREEN}Uso: {WHITE}./run {GREEN}[opciones]{RESET}")
         print(f"    {YELLOW}Opciones:")
-        print(f"    {BLUE}  --help         Muestra esta ayuda")
-        print(f"    {BLUE}  -v             Muestra la version")
-        print(f"    {BLUE}  -c             Ejecuta un comando del LazyOwn ej: ping")
-        print(f"    {BLUE}  --no-banner    No muestra el Banner{RESET}")
-        print(f"    {BLUE}  -s             Run as r00t {RESET}")
+        print(f"    {BLUE}  --help             Muestra esta ayuda")
+        print(f"    {BLUE}  -v                 Muestra la version")
+        print(f"    {BLUE}  -p <payloadN.json> Ejecuta LazyOwn con un payload.json diferente ejemplo ./run -p payload1.json, (Especial para Red Teams)")
+        print(f"    {BLUE}  -c <comando>       Ejecuta un comando del LazyOwn ej: ping")
+        print(f"    {BLUE}  --no-banner        No muestra el Banner{RESET}")
+        print(f"    {BLUE}  -s                 Run as r00t {RESET}")
         sys.exit(0)
 
     elif arg == "-v":
@@ -782,8 +1119,12 @@ for arg in arguments:
         RUN_AS_ROOT = True
 
     elif arg.startswith("-c"):
-        print_msg(f"Ejecutando comando {arg}")
+        print_msg(f"Ejecutando comando: opción {arg}")
         break
+    elif arg.startswith("-p"):
+        print_msg(f"Cargando Payload: opción {arg}")
+        break
+        
     else:
         print_error(f"Argumento no reconocido: {arg}")
         sys.exit(2)

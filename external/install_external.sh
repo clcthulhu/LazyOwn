@@ -59,6 +59,14 @@ download() {
         "git clone https://github.com/r0oth3x49/ghauri.git .exploit/ghauri_sqli"
         "git clone https://github.com/Mr-Robert0/Logsensor.git .exploit/logsensor_login_scanner_vuln"
         "git clone https://github.com/mhaskar/Octopus.git .exploit/octopus_c2_powershells"
+        "git clone https://github.com/blacklanternsecurity/bbot .exploit/bbot_osint"
+        "git clone https://github.com/epinna/weevely3.git .exploit/weevely_phpshell"
+        "git clone https://github.com/RedSiege/Jigsaw.git .exploit/jigsaw_RandomizeShellcodes"
+        "git clone https://github.com/naksyn/Pyramid.git .exploit/Pyramid"
+        "git clone https://github.com/naksyn/ModuleShifting.git .exploit/ModuleShifting_usewith_Pyramid"
+        "git clone https://github.com/xkaneiki/CVE-2023-0386.git .exploit/CVE-2023-0386"
+        "git clone https://github.com/ropnop/kerbrute.git .exploit/kerbrute"
+        "git clone https://github.com/CravateRouge/bloodyAD.git .exploit/bloodyAD"
     )
     # Imprime los últimos argumentos de cada comando
     echo "    [+] Seleccione el número del comando que desea clonar:"
